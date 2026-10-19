@@ -1,6 +1,6 @@
 // Offline cache for The Living Planner — Daily.
 // Bump VERSION whenever you upload a new index.html so the iPad picks it up.
-const VERSION = 'tlp-daily-v1';
+const VERSION = 'tlp-daily-v2';
 const FILES = ['./', './index.html', './manifest.json', './icon-180.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
