@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Planner">
+<meta name="theme-color" content="#0d1f33">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+<title>The Living Planner</title>
+<style>
+:root{
+  --ink:#0d1f33; --ink2:#3d4d61; --brass:#B8965A; --brass2:#8B6F3F;
+  --paper:#FBF8F2; --stone:#F5F1E8; --line:#E3DCCB; --muted:#7d786f;
+  --ok:#2f8f5b; --danger:#b5483a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--stone);color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
+body{padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit;color:var(--ink)}
+
+/* Top bar */
+.top{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;
+  padding:calc(env(safe-area-inset-top) + 10px) max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));
+  border-bottom:1px solid rgba(184,150,90,.35)}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{font-size:.62rem;letter-spacing:.2em;color:var(--brass);font-weight:700;text-transform:uppercase}
+.brand-title{font-family:var(--serif);font-style:italic;font-size:1.25rem;line-height:1.1}
+.saved{font-size:.7rem;color:rgba(255,255,255,.55);transition:opacity .3s}
+.tabs{display:flex;gap:2px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;color:rgba(255,255,255,.6);padding:10px 14px;font-size:.82rem;font-weight:600;
+  border-bottom:2px solid transparent;white-space:nowrap}
+.tab.on{color:#fff;border-bottom-color:var(--brass)}
+
+main{max-width:1000px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) 60px max(16px,env(safe-area-inset-left))}
+
+/* Banners */
+.banner{background:#fff;border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:10px;
+  padding:10px 14px;margin-bottom:14px;font-size:.85rem;color:var(--ink2);display:flex;gap:10px;align-items:center;justify-content:space-between}
+.banner b{color:var(--ink)}
+
+/* Page heading */
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 14px}
+.head h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:2.4rem;margin:0;line-height:1}
+.head .sub{color:var(--muted);font-size:.85rem;margin-top:4px}
+.nav{display:flex;gap:6px;align-items:center}
+.nav button{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.85rem;color:var(--ink)}
+.nav button.solid{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* Cards */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin:0 0 8px;display:flex;gap:8px;align-items:baseline}
+.label small{letter-spacing:0;text-transform:none;font-weight:400;color:var(--muted);font-size:.75rem}
+.grid2{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:760px){.grid2{grid-template-columns:5fr 6fr}.grid2.even{grid-template-columns:1fr 1fr}}
+.grid3{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:760px){.grid3{grid-template-columns:1fr 1fr 1fr}}
+
+/* Inputs */
+.line{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:8px 2px;font-size:.95rem;outline:none}
+.line:focus{border-bottom-color:var(--brass)}
+textarea.box{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px;font-size:.95rem;
+  line-height:1.5;resize:vertical;min-height:84px;outline:none}
+textarea.box:focus,.cell:focus{border-color:var(--brass)}
+.row{display:flex;align-items:center;gap:10px}
+.chk{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:1.5px solid var(--brass);border-radius:5px;
+  background:#fff;flex:0 0 22px;display:grid;place-items:center;margin:0}
+.chk:checked{background:var(--brass)}
+.chk:checked::after{content:'';width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.done .line{text-decoration:line-through;color:var(--muted)}
+
+/* Big 3 */
+.big3{border:1px solid var(--brass);border-radius:10px;padding:4px 12px;margin-bottom:8px;background:#fff}
+.big3 .num{font-family:var(--serif);color:var(--brass);font-size:1.3rem;width:18px}
+
+/* Water */
+.water{display:flex;gap:5px;flex-wrap:wrap}
+.drop{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--brass);background:#fff;font-size:.72rem;color:var(--brass)}
+.drop.on{background:var(--brass);color:#fff}
+
+/* Schedule */
+.sched{border:1px solid var(--brass);border-radius:10px;overflow:hidden;background:#fff}
+.slot{display:grid;grid-template-columns:52px 1fr;border-top:1px solid var(--line)}
+.slot:first-child{border-top:0}
+.slot.half{border-top:1px dashed #eee6d6}
+.slot .t{font-size:.72rem;font-weight:700;color:var(--ink);text-align:right;padding:9px 8px;border-right:1px solid var(--line);background:var(--stone)}
+.slot.half .t{color:transparent}
+.slot input{border:0;padding:8px 10px;font-size:.9rem;outline:none;background:transparent;width:100%}
+.slot input:focus{background:#fffaf0}
+
+/* Week */
+.weekday{display:grid;grid-template-columns:78px 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:8px;background:#fff}
+.weekday .d{background:var(--stone);padding:8px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.weekday .d.we{background:var(--ink);color:var(--brass)}
+.weekday .d b{font-size:.7rem;letter-spacing:.1em}
+.weekday .d span{font-family:var(--serif);font-size:1.4rem;color:var(--brass)}
+.weekday .d.we b{color:#fff}
+.weekday .d a{font-size:.68rem;color:var(--brass);text-decoration:underline;margin-top:auto}
+.weekday .tasks{padding:2px 10px}
+.weekday .tasks .row{border-bottom:1px solid #f0eadc}
+.weekday .tasks .row:last-child{border-bottom:0}
+.weekday .tasks .line{border:0}
+
+/* Rating */
+.rate{display:flex;gap:5px;flex-wrap:wrap}
+.rate button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--brass);background:#fff;color:var(--brass);font-size:.78rem;font-weight:600}
+.rate button.on{background:var(--brass);color:#fff}
+.scoreline{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.scoreline:last-child{border-bottom:0}
+.scoreline b{font-size:.92rem}
+.scoreline small{display:block;color:var(--muted);font-size:.75rem;font-weight:400}
+
+/* Calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);background:#fff;border-radius:6px;overflow:hidden}
+.cal .dow{font-size:.65rem;font-weight:700;color:var(--brass);text-align:center;padding:6px 0;letter-spacing:.1em;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--stone)}
+.cal .c{min-height:74px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px 6px;text-align:left;background:#fff;border-top:0;border-left:0;position:relative;display:flex;flex-direction:column;gap:2px}
+.cal .c.empty{background:var(--stone)}
+.cal .c .n{font-weight:700;font-size:.82rem}
+.cal .c.today{box-shadow:inset 0 0 0 2px var(--brass)}
+.cal .c .dots{font-size:.62rem;color:var(--muted);line-height:1.2;overflow:hidden}
+.cal .c .bar{height:3px;border-radius:2px;background:var(--line);margin-top:auto}
+.cal .c .bar i{display:block;height:100%;background:var(--ok);border-radius:2px}
+
+/* Habit grid */
+.hg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.hg{border-collapse:collapse;font-size:.72rem}
+table.hg th{font-weight:700;color:var(--ink);padding:4px 2px;min-width:26px}
+table.hg th.name{text-align:left;min-width:150px;position:sticky;left:0;background:var(--paper)}
+table.hg td{padding:2px;text-align:center}
+table.hg td.name{position:sticky;left:0;background:var(--paper);padding-right:8px}
+table.hg td.name input{border:0;border-bottom:1px solid var(--line);background:transparent;width:150px;padding:6px 2px;font-size:.85rem;outline:none}
+.hcell{width:24px;height:24px;border:1px solid var(--line);border-radius:4px;background:#fff;padding:0}
+.hcell.on{background:var(--ok);border-color:var(--ok)}
+.hcell.today{border-color:var(--brass);border-width:2px}
+table.hg td.pct{font-weight:700;color:var(--brass);padding-left:8px}
+
+/* Finance */
+table.fin{width:100%;border-collapse:collapse;font-size:.88rem}
+table.fin th{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-align:left;padding:6px 4px;border-bottom:1.5px solid var(--brass)}
+table.fin td{border-bottom:1px solid var(--line);padding:0}
+.cell{width:100%;border:1px solid transparent;background:transparent;padding:8px 4px;outline:none;border-radius:4px}
+.cell.num{text-align:right}
+table.fin td.x{width:34px;text-align:center}
+table.fin td.x button{border:0;background:none;color:var(--muted);font-size:1rem;padding:6px}
+table.fin td.c{width:44px;text-align:center}
+.fin-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.add{background:none;border:1px dashed var(--brass);color:var(--brass2);border-radius:999px;padding:6px 14px;font-size:.8rem;font-weight:600}
+.total{font-weight:700;font-size:.95rem}
+.total span{font-size:.66rem;letter-spacing:.1em;color:var(--brass);margin-right:8px}
+.summary{background:var(--ink);color:#fff;border-radius:14px;padding:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.summary div small{display:block;font-size:.62rem;letter-spacing:.14em;color:var(--brass);font-weight:700}
+.summary div strong{font-family:var(--serif);font-size:1.7rem;font-weight:400}
+.neg{color:#f2a597}
+
+/* Buttons */
+.btn{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:11px 20px;font-weight:600;font-size:.9rem}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:#fff;color:var(--danger);border:1px solid #e8c3bd}
+.muted{color:var(--muted);font-size:.85rem;line-height:1.5}
+.quote{font-family:var(--serif);font-style:italic;text-align:center;color:var(--ink2);margin:24px 0 4px}
+.focusline{font-family:var(--serif);font-style:italic;color:var(--ink2);font-size:1rem}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <div>
+      <div class="brand">The Living</div>
+      <div class="brand-title">Planner</div>
+    </div>
+    <div class="saved" id="saved">Saved on this iPad</div>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+</header>
+<main id="app"></main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   The Living Planner — Daily (local-only edition)
+   All data lives in this browser's localStorage under one key.
+═══════════════════════════════════════════════════════════════ */
+const KEY = 'tlp.daily.v1';
+const TABS = [
+  ['today','Today'],['week','Week'],['month','Month'],['habits','Habits'],
+  ['finance','Finance'],['setup','Setup'],['review','Review'],['backup','Backup']
+];
+const AREAS = [
+  ['Faith','Prayer, scripture, spiritual presence'],['Health','Movement, sleep, nutrition, energy'],
+  ['Finance','Income, savings, spending discipline'],['Productivity','Focus, output, follow-through'],
+  ['Wellness','Mental & emotional wellbeing'],['Growth','Learning, reflection, self-mastery'],
+  ['Lifestyle','Home, environment, rhythms'],['Relationships','Family, friendships, community']
+];
+const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
+// ── State ──────────────────────────────────────────────────────
+let S = load();
+let tab = sessionGet('tab') || 'today';
+let cursor = sessionGet('cursor') || iso(new Date());
+
+function load(){
+  try { const raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw) } catch(e){}
+  return { v:1, days:{}, weeks:{}, months:{}, setup:{}, meta:{} };
+}
+let saveTimer;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(S));
+      flash('Saved on this iPad');
+    } catch(e){ flash('⚠ Could not save — storage full or blocked'); }
+  }, 250);
+}
+function flash(t){ const el = document.getElementById('saved'); el.textContent = t; el.style.opacity = 1 }
+function sessionGet(k){ try { return sessionStorage.getItem('tlp.'+k) } catch(e){ return null } }
+function sessionSet(k,v){ try { sessionStorage.setItem('tlp.'+k, v) } catch(e){} }
+
+// Path helpers: "days.2026-10-19.big3.0"
+function getP(path, dflt=''){
+  let o = S;
+  for (const k of path.split('.')) { if (o == null || typeof o !== 'object' || !(k in o)) return dflt; o = o[k] }
+  return o == null ? dflt : o;
+}
+function setP(path, val){
+  const ks = path.split('.'); let o = S;
+  for (let i=0;i<ks.length-1;i++){ if (typeof o[ks[i]] !== 'object' || o[ks[i]] === null) o[ks[i]] = {}; o = o[ks[i]] }
+  o[ks.at(-1)] = val; save();
+}
+function delP(path){
+  const ks = path.split('.'); let o = S;
+  for (let i=0;i<ks.length-1;i++){ o = o?.[ks[i]]; if (!o) return }
+  delete o[ks.at(-1)]; save();
+}
+
+// ── Date helpers ───────────────────────────────────────────────
+function iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` }
+function parse(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d) }
+function addDays(s,n){ const d = parse(s); d.setDate(d.getDate()+n); return iso(d) }
+function weekStart(s){ const d = parse(s); d.setDate(d.getDate() - d.getDay()); return iso(d) }
+function monthKey(s){ return s.slice(0,7) }
+function daysInMonth(mk){ const [y,m] = mk.split('-').map(Number); return new Date(y, m, 0).getDate() }
+function fmt(s, opts){ return parse(s).toLocaleDateString('en-US', opts) }
+function monthName(mk){ return fmt(mk+'-01', {month:'long'}) }
+const TODAY = () => iso(new Date());
+
+// ── Small render helpers ───────────────────────────────────────
+const esc = (v) => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const line = (p, ph='') => `<input class="line" data-p="${p}" value="${esc(getP(p))}" placeholder="${esc(ph)}">`;
+const area = (p, ph='', rows=3) => `<textarea class="box" rows="${rows}" data-p="${p}" placeholder="${esc(ph)}">${esc(getP(p))}</textarea>`;
+const chk = (p) => `<input type="checkbox" class="chk" data-p="${p}" ${getP(p,false) ? 'checked' : ''}>`;
+const rate = (p) => `<div class="rate" data-rate="${p}">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button type="button" data-n="${n}" class="${Number(getP(p,0))===n?'on':''}">${n}</button>`).join('')}</div>`;
+const label = (t, sub='') => `<p class="label">${t}${sub ? ` <small>${sub}</small>` : ''}</p>`;
+const money = (n) => (n<0?'-':'') + '$' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
+const num = (v) => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g,'')); return isNaN(n) ? 0 : n };
+
+// Habit names for a month (8 slots)
+function habitNames(mk){ return Array.from({length:8}, (_,i) => getP(`months.${mk}.habits.${i}`)) }
+
+// ── Banners ────────────────────────────────────────────────────
+function banners(){
+  let out = '';
+  const standalone = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+  if (!standalone) out += `<div class="banner"><div><b>Add this to your Home Screen.</b> Tap Share → Add to Home Screen, then always open it from that icon. That keeps Safari from clearing your entries.</div></div>`;
+  const hasData = Object.keys(S.days).length > 0;
+  const last = S.meta?.lastBackup;
+  const stale = !last || (Date.now() - new Date(last).getTime()) > 7*86400000;
+  if (hasData && stale) out += `<div class="banner"><div><b>Back up your planner.</b> ${last ? 'Last backup: ' + new Date(last).toLocaleDateString() + '.' : 'No backup yet.'} Saves a copy to Files / iCloud Drive.</div><button class="btn" data-act="export">Back up</button></div>`;
+  return out;
+}
+
+// ── Views ──────────────────────────────────────────────────────
+function viewToday(){
+  const d = cursor, mk = monthKey(d), ws = weekStart(d), P = `days.${d}`;
+  const names = habitNames(mk);
+  const weekFocus = getP(`weeks.${ws}.focus`);
+  const water = Number(getP(`${P}.water`,0));
+  const yday = parse(d); const start = new Date(yday.getFullYear(),0,0);
+  const dayNum = Math.round((yday - start)/86400000);
+
+  let slots = '';
+  for (let h=6; h<22; h++) for (const m of ['00','30']) {
+    const key = `${String(h).padStart(2,'0')}${m}`;
+    const lab = `${h%12===0?12:h%12}${h<12?'a':'p'}`;
+    slots += `<div class="slot ${m==='30'?'half':''}"><div class="t">${m==='00'?lab:'·'}</div><input data-p="${P}.sched.${key}" value="${esc(getP(`${P}.sched.${key}`))}"></div>`;
+  }
+
+  return `
+  <div class="head">
+    <div><h1>${fmt(d,{weekday:'long'})}</h1><div class="sub">${fmt(d,{month:'long',day:'numeric',year:'numeric'})} · Day ${dayNum}</div></div>
+    <div class="nav">
+      <button data-act="day" data-n="-1" aria-label="Previous day">‹</button>
+      <button class="${d===TODAY()?'solid':''}" data-act="goto" data-d="${TODAY()}">Today</button>
+      <button data-act="day" data-n="1" aria-label="Next day">›</button>
+    </div>
+  </div>
+  ${weekFocus ? `<div class="card"><p class="label">This week's focus</p><div class="focusline">${esc(weekFocus)}</div></div>` : ''}
+  <div class="grid2">
+    <div>
+      <div class="card">
+        ${label("Today's Big 3", 'the wins that make today matter')}
+        ${[0,1,2].map(i=>`<div class="big3 row ${getP(`${P}.big3done.${i}`,false)?'done':''}"><span class="num">${i+1}</span>${line(`${P}.big3.${i}`)}${chk(`${P}.big3done.${i}`)}</div>`).join('')}
+      </div>
+      <div class="card">
+        ${label('Habits', names.some(Boolean) ? '' : 'set your habits on the Habits tab')}
+        ${names.map((n,i)=> n ? `<div class="row" style="padding:6px 0">${chk(`${P}.habits.${i}`)}<span>${esc(n)}</span></div>` : '').join('') || '<p class="muted">No habits set for this month yet.</p>'}
+      </div>
+      <div class="card">
+        ${label('Water','8 × 8oz')}
+        <div class="water">${Array.from({length:8},(_,i)=>`<button class="drop ${i<water?'on':''}" data-act="water" data-n="${i+1}">${i+1}</button>`).join('')}</div>
+      </div>
+      <div class="card">
+        ${label('Gratitude','three things')}
+        ${[0,1,2].map(i=>line(`${P}.grat.${i}`, `${i+1}.`)).join('')}
+      </div>
+      <div class="card">
+        ${label('Scripture / Word for today')}
+        ${area(`${P}.scripture`,'Verse, reference, what it means for today…',3)}
+      </div>
+      <div class="card">
+        ${label('Notes')}
+        ${area(`${P}.notes`,'',4)}
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        ${label('Schedule','time-block your day')}
+        <div class="sched">${slots}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function viewWeek(){
+  const ws = weekStart(cursor), we = addDays(ws,6), W = `weeks.${ws}`;
+  const rangeLabel = `${fmt(ws,{month:'short',day:'numeric'})} – ${fmt(we,{month:'short',day:'numeric'})}`;
+  let days = '';
+  for (let i=0;i<7;i++){
+    const d = addDays(ws,i);
+    days += `<div class="weekday">
+      <div class="d ${i===0||i===6?'we':''}"><b>${DOW[i]}</b><span>${parse(d).getDate()}</span><a href="#" data-act="goto" data-open="1" data-d="${d}">open day</a></div>
+      <div class="tasks">${[0,1,2].map(r=>`<div class="row ${getP(`${W}.plan.${i}.${r}.done`,false)?'done':''}">${chk(`${W}.plan.${i}.${r}.done`)}${line(`${W}.plan.${i}.${r}.t`)}</div>`).join('')}</div>
+    </div>`;
+  }
+  return `
+  <div class="head">
+    <div><h1>Week</h1><div class="sub">${rangeLabel}</div></div>
+    <div class="nav"><button data-act="day" data-n="-7">‹</button><button data-act="goto" data-d="${TODAY()}">This week</button><button data-act="day" data-n="7">›</button></div>
+  </div>
+  <div class="card" style="border-color:var(--brass)">
+    ${label("This week's focus",'the one thing that matters most')}
+    ${line(`${W}.focus`)}
+  </div>
+  <div class="grid2 even">
+    <div>${days}</div>
+    <div>
+      <div class="card">${label('Wins','what went right this week')}${area(`${W}.wins`)}</div>
+      <div class="card">${label('Gratitude')}${area(`${W}.grat`)}</div>
+      <div class="card">${label('Faith & prayer','what God is teaching me / requests')}${area(`${W}.faith`)}</div>
+      <div class="card">${label("What I'm learning")}${area(`${W}.learn`)}</div>
+      <div class="card">${label('Next week — one thing')}${line(`${W}.next`)}</div>
+      <div class="card">${label('Week rating')}${rate(`${W}.rating`)}</div>
+    </div>
+  </div>`;
+}
+
+function viewMonth(){
+  const mk = monthKey(cursor), M = `months.${mk}`, n = daysInMonth(mk);
+  const first = parse(mk+'-01').getDay();
+  const names = habitNames(mk); const active = names.map((x,i)=>x?i:-1).filter(i=>i>=0);
+  let cells = DOW.map(x=>`<div class="dow">${x}</div>`).join('');
+  for (let i=0;i<first;i++) cells += `<div class="c empty"></div>`;
+  for (let day=1; day<=n; day++){
+    const d = `${mk}-${String(day).padStart(2,'0')}`;
+    const big = (getP(`days.${d}.big3.0`) || getP(`days.${d}.big3.1`) || '');
+    const doneH = active.filter(i=>getP(`days.${d}.habits.${i}`,false)).length;
+    const pct = active.length ? Math.round(doneH/active.length*100) : 0;
+    cells += `<button class="c ${d===TODAY()?'today':''}" data-act="goto" data-open="1" data-d="${d}">
+      <span class="n">${day}</span><span class="dots">${esc(big).slice(0,40)}</span>
+      ${active.length ? `<span class="bar"><i style="width:${pct}%"></i></span>` : ''}
+    </button>`;
+  }
+  const trail = (7 - ((first + n) % 7)) % 7;
+  for (let i=0;i<trail;i++) cells += `<div class="c empty"></div>`;
+  return `
+  <div class="head">
+    <div><h1>${monthName(mk)}</h1><div class="sub">${mk.slice(0,4)} · tap a day to open it</div></div>
+    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
+  </div>
+  <div class="card"><div class="cal">${cells}</div></div>
+  <div class="grid3">
+    <div class="card">${label('Month focus')}${area(`${M}.focus`,'',5)}</div>
+    <div class="card">${label('Top 3 goals')}${[0,1,2].map(i=>line(`${M}.top.${i}`,`${i+1}.`)).join('')}</div>
+    <div class="card">${label('Must-do events')}${area(`${M}.events`,'',5)}</div>
+  </div>`;
+}
+
+function viewHabits(){
+  const mk = monthKey(cursor), n = daysInMonth(mk);
+  const names = habitNames(mk);
+  let head = `<tr><th class="name">Habit</th>${Array.from({length:n},(_,i)=>`<th>${i+1}</th>`).join('')}<th>%</th></tr>`;
+  let rows = '';
+  for (let h=0; h<8; h++){
+    let done = 0, cells = '';
+    for (let day=1; day<=n; day++){
+      const d = `${mk}-${String(day).padStart(2,'0')}`;
+      const on = getP(`days.${d}.habits.${h}`,false); if (on) done++;
+      cells += `<td><button class="hcell ${on?'on':''} ${d===TODAY()?'today':''}" data-act="habit" data-d="${d}" data-h="${h}" aria-label="${d}"></button></td>`;
+    }
+    const elapsed = monthKey(TODAY()) === mk ? parse(TODAY()).getDate() : (mk < monthKey(TODAY()) ? n : 0);
+    const pct = names[h] && elapsed ? Math.round(done/elapsed*100) + '%' : '';
+    rows += `<tr><td class="name"><input data-p="months.${mk}.habits.${h}" value="${esc(names[h])}" placeholder="Habit ${h+1}"></td>${cells}<td class="pct">${pct}</td></tr>`;
+  }
+  return `
+  <div class="head">
+    <div><h1>Habits</h1><div class="sub">${monthName(mk)} · what you do daily becomes who you are</div></div>
+    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
+  </div>
+  <div class="card"><p class="muted" style="margin-top:0">Name up to 8 habits. They show up as checkboxes on each day's page, and checking them in either place updates both.</p>
+    <div class="hg-wrap"><table class="hg">${head}${rows}</table></div></div>
+  <div class="card">${label("Patterns I notice / what's working")}${area(`months.${mk}.patterns`,'',4)}</div>`;
+}
+
+function finTable(mk, kind, cols){
+  const base = `months.${mk}.fin.${kind}`;
+  const rows = Object.entries(getP(base,{}) || {}).sort((a,b)=>a[0].localeCompare(b[0]));
+  const total = rows.reduce((s,[,r])=>s+num(r.amt),0);
+  const body = rows.map(([id])=>`<tr>${cols.map(c=> c.k==='paid'
+      ? `<td class="c">${chk(`${base}.${id}.paid`)}</td>`
+      : `<td><input class="cell ${c.k==='amt'?'num':''}" data-p="${base}.${id}.${c.k}" value="${esc(getP(`${base}.${id}.${c.k}`))}" placeholder="${c.ph||''}" ${c.k==='amt'?'inputmode="decimal"':''}></td>`).join('')}
+      <td class="x"><button data-act="delrow" data-p="${base}.${id}" aria-label="Delete row">×</button></td></tr>`).join('');
+  return `<table class="fin"><tr>${cols.map(c=>`<th style="${c.w?`width:${c.w}`:''}">${c.h}</th>`).join('')}<th></th></tr>${body}</table>
+    <div class="fin-foot"><button class="add" data-act="addrow" data-p="${base}">+ Add row</button>
+    <div class="total"><span>TOTAL</span><b data-total="${kind}">${money(total)}</b></div></div>`;
+}
+function finTotals(mk){
+  const sum = (k) => Object.values(getP(`months.${mk}.fin.${k}`,{})||{}).reduce((s,r)=>s+num(r.amt),0);
+  const inc = sum('income'), out = sum('bills') + sum('exp');
+  return { inc, out, net: inc - out, income: inc, bills: sum('bills'), exp: sum('exp') };
+}
+function viewFinance(){
+  const mk = monthKey(cursor), t = finTotals(mk);
+  return `
+  <div class="head">
+    <div><h1>${monthName(mk)} money</h1><div class="sub">Track it. Own it. Multiply it.</div></div>
+    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
+  </div>
+  <div class="summary" style="margin-bottom:14px">
+    <div><small>INCOME</small><strong data-sum="inc">${money(t.inc)}</strong></div>
+    <div><small>OUT</small><strong data-sum="out">${money(t.out)}</strong></div>
+    <div><small>NET</small><strong data-sum="net" class="${t.net<0?'neg':''}">${money(t.net)}</strong></div>
+  </div>
+  <div class="card">${label('Income')}${finTable(mk,'income',[{k:'date',h:'Date',w:'90px',ph:'10/1'},{k:'src',h:'Source'},{k:'amt',h:'Amount',w:'110px',ph:'0.00'}])}</div>
+  <div class="card">${label('Fixed bills')}${finTable(mk,'bills',[{k:'name',h:'Bill'},{k:'due',h:'Due',w:'70px',ph:'15th'},{k:'amt',h:'Amount',w:'110px',ph:'0.00'},{k:'paid',h:'Paid',w:'44px'}])}</div>
+  <div class="card">${label('Variable expenses')}${finTable(mk,'exp',[{k:'date',h:'Date',w:'80px',ph:'10/1'},{k:'cat',h:'Category',w:'120px',ph:'Groceries'},{k:'desc',h:'Description'},{k:'amt',h:'Amount',w:'110px',ph:'0.00'}])}</div>`;
+}
+
+function scorecard(path){
+  return AREAS.map(([a,d])=>`<div class="scoreline"><b>${a}<small>${d}</small></b>${rate(`${path}.${a}`)}</div>`).join('');
+}
+function viewSetup(){
+  const mk = monthKey(cursor), M = `months.${mk}`;
+  return `
+  <div class="head">
+    <div><h1>Setup</h1><div class="sub">${monthName(mk)} ${mk.slice(0,4)} · set the direction before the days fill up</div></div>
+    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
+  </div>
+  <div class="grid2 even">
+    <div>
+      <div class="card" style="border-color:var(--brass)">${label('Word of the month')}<input class="line" style="font-family:var(--serif);font-style:italic;font-size:1.6rem" data-p="${M}.word" value="${esc(getP(`${M}.word`))}"></div>
+      <div class="card">${label('Why this word')}${area(`${M}.why`)}</div>
+      <div class="card">${label('Five core values','the non-negotiables — these carry across months')}${[0,1,2,3,4].map(i=>line(`setup.values.${i}`,`${i+1}.`)).join('')}</div>
+    </div>
+    <div>
+      ${[0,1,2].map(i=>`<div class="card">${label(`Goal 0${i+1}`)}
+        ${line(`${M}.goals.${i}.goal`,'The goal')}${line(`${M}.goals.${i}.why`,'Why it matters')}${line(`${M}.goals.${i}.measure`,"How I'll measure it")}</div>`).join('')}
+    </div>
+  </div>
+  <div class="card">${label('Life scorecard — start of month','honest 1–10')}${scorecard(`${M}.scoreStart`)}</div>
+  <p class="quote">“Commit thy works unto the Lord, and thy thoughts shall be established.”</p>
+  <p class="muted" style="text-align:center;margin:0">Proverbs 16:3</p>`;
+}
+
+function viewReview(){
+  const mk = monthKey(cursor), M = `months.${mk}`;
+  const deltas = AREAS.map(([a])=>{
+    const s = Number(getP(`${M}.scoreStart.${a}`,0)), e = Number(getP(`${M}.scoreEnd.${a}`,0));
+    return (s && e) ? `<span style="margin-right:14px"><b>${a}</b> ${s} → ${e} <span style="color:${e>=s?'var(--ok)':'var(--danger)'}">${e-s>=0?'+':''}${e-s}</span></span>` : '';
+  }).join('');
+  return `
+  <div class="head">
+    <div><h1>Looking back</h1><div class="sub">${monthName(mk)} ${mk.slice(0,4)} · monthly review</div></div>
+    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
+  </div>
+  <div class="grid2 even">
+    <div>
+      <div class="card">${label('What went well')}${area(`${M}.rv.well`,'',4)}</div>
+      <div class="card">${label("What didn't work")}${area(`${M}.rv.didnt`)}</div>
+      <div class="card">${label('God showed up here')}${area(`${M}.rv.god`)}</div>
+    </div>
+    <div>
+      <div class="card">${label('Lessons learned')}${area(`${M}.rv.lessons`)}</div>
+      <div class="card">${label('Next month — shift')}${area(`${M}.rv.shift`,'',2)}</div>
+      <div class="card">${label('How was the month overall?')}${rate(`${M}.rv.rating`)}</div>
+    </div>
+  </div>
+  <div class="card">${label('Life scorecard — end of month','compare to the start')}${scorecard(`${M}.scoreEnd`)}
+    ${deltas ? `<div style="margin-top:12px;font-size:.85rem;line-height:1.9">${deltas}</div>` : ''}</div>`;
+}
+
+function viewBackup(){
+  const bytes = new Blob([JSON.stringify(S)]).size;
+  const last = S.meta?.lastBackup;
+  return `
+  <div class="head"><div><h1>Backup</h1><div class="sub">Your planner lives only on this iPad. Keep a copy somewhere safe.</div></div></div>
+  <div class="card">
+    ${label('Save a backup')}
+    <p class="muted">Saves a <b>.json</b> file. On iPad, choose <b>Save to Files → iCloud Drive</b>. Do this weekly.</p>
+    <button class="btn" data-act="export">Back up now</button>
+    <p class="muted" style="margin-bottom:0">Last backup: <b>${last ? new Date(last).toLocaleString() : 'never'}</b> · ${Object.keys(S.days).length} days logged · ${(bytes/1024).toFixed(1)} KB</p>
+  </div>
+  <div class="card">
+    ${label('Restore from a backup')}
+    <p class="muted">Replaces everything on this iPad with the backup file you pick.</p>
+    <label class="btn ghost" style="display:inline-block">Choose backup file<input type="file" accept="application/json,.json" id="importFile" hidden></label>
+  </div>
+  <div class="card">
+    ${label('Start over')}
+    <p class="muted">Erases every entry on this iPad. Back up first.</p>
+    <button class="btn danger" data-act="wipe">Erase all entries</button>
+  </div>
+  <div class="card">
+    ${label('Keeping your data safe')}
+    <p class="muted" style="margin:0">• Open the planner from the Home Screen icon, not a Safari tab.<br>
+    • Don't use Private Browsing.<br>
+    • Clearing Safari's history or website data will erase it.<br>
+    • The Home Screen app and Safari keep separate copies. Pick one and stick with it.</p>
+  </div>`;
+}
+
+const VIEWS = { today:viewToday, week:viewWeek, month:viewMonth, habits:viewHabits, finance:viewFinance, setup:viewSetup, review:viewReview, backup:viewBackup };
+
+// ── Render ─────────────────────────────────────────────────────
+function render(keepScroll=false){
+  const y = window.scrollY;
+  document.getElementById('tabs').innerHTML = TABS.map(([k,l])=>`<button class="tab ${tab===k?'on':''}" data-tab="${k}">${l}</button>`).join('');
+  document.getElementById('app').innerHTML = banners() + VIEWS[tab]();
+  sessionSet('tab', tab); sessionSet('cursor', cursor);
+  if (keepScroll) window.scrollTo(0, y); else window.scrollTo(0, 0);
+}
+function refreshFinance(){
+  const t = finTotals(monthKey(cursor));
+  for (const k of ['income','bills','exp']) { const el = document.querySelector(`[data-total="${k}"]`); if (el) el.textContent = money(t[k]) }
+  for (const k of ['inc','out','net']) { const el = document.querySelector(`[data-sum="${k}"]`); if (el) { el.textContent = money(t[k]); if (k==='net') el.classList.toggle('neg', t.net<0) } }
+}
+
+// ── Events ─────────────────────────────────────────────────────
+document.addEventListener('input', (e) => {
+  const p = e.target.dataset?.p; if (!p) return;
+  if (e.target.type === 'checkbox') return;
+  setP(p, e.target.value);
+  if (p.includes('.fin.')) refreshFinance();
+});
+document.addEventListener('change', (e) => {
+  const t = e.target;
+  if (t.id === 'importFile') return doImport(t.files[0]);
+  if (t.type === 'checkbox' && t.dataset.p) {
+    setP(t.dataset.p, t.checked);
+    t.closest('.row')?.classList.toggle('done', t.checked && /done/.test(t.dataset.p));
+  }
+});
+document.addEventListener('click', (e) => {
+  const tb = e.target.closest('[data-tab]');
+  if (tb) { tab = tb.dataset.tab; return render() }
+
+  const rb = e.target.closest('[data-rate] button');
+  if (rb) {
+    const wrap = rb.parentElement, p = wrap.dataset.rate, n = Number(rb.dataset.n);
+    const cur = Number(getP(p,0)); setP(p, cur === n ? 0 : n);
+    wrap.querySelectorAll('button').forEach(b => b.classList.toggle('on', Number(b.dataset.n) === Number(getP(p,0))));
+    if (tab === 'review') render(true);
+    return;
+  }
+
+  const a = e.target.closest('[data-act]'); if (!a) return;
+  const act = a.dataset.act;
+  if (act === 'day')   { e.preventDefault(); cursor = addDays(cursor, Number(a.dataset.n)); render() }
+  if (act === 'goto')  { e.preventDefault(); cursor = a.dataset.d; if (a.dataset.open) tab = 'today'; render() }
+  if (act === 'month') { const d = parse(cursor); d.setDate(1); d.setMonth(d.getMonth() + Number(a.dataset.n)); cursor = iso(d); render() }
+  if (act === 'water') { const p = `days.${cursor}.water`, n = Number(a.dataset.n); setP(p, Number(getP(p,0)) === n ? n-1 : n); render(true) }
+  if (act === 'habit') { const p = `days.${a.dataset.d}.habits.${a.dataset.h}`; const v = !getP(p,false); setP(p, v); a.classList.toggle('on', v) }
+  if (act === 'addrow'){ setP(`${a.dataset.p}.${Date.now().toString(36)}`, {}); render(true) }
+  if (act === 'delrow'){ if (confirm('Delete this row?')) { delP(a.dataset.p); render(true) } }
+  if (act === 'export') doExport();
+  if (act === 'wipe')  { if (confirm('Erase every entry on this iPad? This cannot be undone.') && confirm('Are you sure? Did you back up first?')) { S = { v:1, days:{}, weeks:{}, months:{}, setup:{}, meta:{} }; save(); render() } }
+});
+
+// ── Backup ─────────────────────────────────────────────────────
+async function doExport(){
+  S.meta = S.meta || {}; S.meta.lastBackup = new Date().toISOString();
+  localStorage.setItem(KEY, JSON.stringify(S));
+  const name = `living-planner-backup-${TODAY()}.json`;
+  const file = new File([JSON.stringify(S, null, 1)], name, { type: 'application/json' });
+  try {
+    if (navigator.canShare && navigator.canShare({ files:[file] })) { await navigator.share({ files:[file], title:name }); render(true); return }
+  } catch(err) { if (err.name === 'AbortError') return }
+  const url = URL.createObjectURL(file);
+  const link = Object.assign(document.createElement('a'), { href:url, download:name });
+  document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+  render(true);
+}
+function doImport(file){
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      if (!data || typeof data !== 'object' || !('days' in data)) throw new Error('Not a planner backup');
+      if (!confirm('Replace everything on this iPad with this backup?')) return;
+      S = data; localStorage.setItem(KEY, JSON.stringify(S)); alert('Backup restored.'); render();
+    } catch(err) { alert('That file is not a valid planner backup.') }
+  };
+  r.readAsText(file);
+}
+
+// ── Boot ───────────────────────────────────────────────────────
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{});
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+render();
+</script>
+</body>
+</html>
