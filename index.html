@@ -15,14 +15,14 @@
 :root{
   --ink:#0d1f33; --ink2:#3d4d61; --brass:#B8965A; --brass2:#8B6F3F;
   --paper:#FBF8F2; --stone:#F5F1E8; --line:#E3DCCB; --muted:#7d786f;
-  --ok:#2f8f5b; --danger:#b5483a;
+  --ok:#2f8f5b; --warn:#c98a2b; --danger:#b5483a;
   --serif:Georgia,'Times New Roman',serif;
   --sans:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--stone);color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
 body{padding-bottom:env(safe-area-inset-bottom)}
-button{font:inherit;cursor:pointer}
+button{font:inherit;cursor:pointer;color:inherit}
 input,textarea,select{font:inherit;color:var(--ink)}
 
 /* Top bar */
@@ -32,14 +32,20 @@ input,textarea,select{font:inherit;color:var(--ink)}
 .top-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .brand{font-size:.62rem;letter-spacing:.2em;color:var(--brass);font-weight:700;text-transform:uppercase}
 .brand-title{font-family:var(--serif);font-style:italic;font-size:1.25rem;line-height:1.1}
-.saved{font-size:.7rem;color:rgba(255,255,255,.55);transition:opacity .3s}
+.saved{font-size:.7rem;color:rgba(255,255,255,.55)}
 .tabs{display:flex;gap:2px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{background:none;border:0;color:rgba(255,255,255,.6);padding:10px 14px;font-size:.82rem;font-weight:600;
+.tab{background:none;border:0;color:rgba(255,255,255,.6);padding:10px 13px;font-size:.82rem;font-weight:600;
   border-bottom:2px solid transparent;white-space:nowrap}
 .tab.on{color:#fff;border-bottom-color:var(--brass)}
 
 main{max-width:1000px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) 60px max(16px,env(safe-area-inset-left))}
+
+/* Sub tabs */
+.subtabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}
+.subtabs::-webkit-scrollbar{display:none}
+.sub{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:.8rem;font-weight:600;white-space:nowrap;color:var(--ink2)}
+.sub.on{background:var(--ink);border-color:var(--ink);color:#fff}
 
 /* Banners */
 .banner{background:#fff;border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:10px;
@@ -48,33 +54,39 @@ main{max-width:1000px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-ri
 
 /* Page heading */
 .head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 14px}
-.head h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:2.4rem;margin:0;line-height:1}
-.head .sub{color:var(--muted);font-size:.85rem;margin-top:4px}
+.head h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:2.3rem;margin:0;line-height:1}
+.head .sub-t{color:var(--muted);font-size:.85rem;margin-top:4px}
 .nav{display:flex;gap:6px;align-items:center}
 .nav button{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.85rem;color:var(--ink)}
 .nav button.solid{background:var(--ink);color:#fff;border-color:var(--ink)}
 
 /* Cards */
 .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
-.label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin:0 0 8px;display:flex;gap:8px;align-items:baseline}
+.label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin:0 0 8px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
 .label small{letter-spacing:0;text-transform:none;font-weight:400;color:var(--muted);font-size:.75rem}
 .grid2{display:grid;grid-template-columns:1fr;gap:14px}
 @media(min-width:760px){.grid2{grid-template-columns:5fr 6fr}.grid2.even{grid-template-columns:1fr 1fr}}
 .grid3{display:grid;grid-template-columns:1fr;gap:14px}
 @media(min-width:760px){.grid3{grid-template-columns:1fr 1fr 1fr}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--ink);color:#fff;border-radius:12px;padding:12px 14px}
+.kpi small{display:block;font-size:.6rem;letter-spacing:.14em;color:var(--brass);font-weight:700;text-transform:uppercase}
+.kpi strong{font-family:var(--serif);font-size:1.5rem;font-weight:400}
 
 /* Inputs */
 .line{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:8px 2px;font-size:.95rem;outline:none}
 .line:focus{border-bottom-color:var(--brass)}
 textarea.box{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px;font-size:.95rem;
-  line-height:1.5;resize:vertical;min-height:84px;outline:none}
+  line-height:1.5;resize:vertical;min-height:70px;outline:none}
 textarea.box:focus,.cell:focus{border-color:var(--brass)}
 .row{display:flex;align-items:center;gap:10px}
 .chk{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:1.5px solid var(--brass);border-radius:5px;
   background:#fff;flex:0 0 22px;display:grid;place-items:center;margin:0}
 .chk:checked{background:var(--brass)}
 .chk:checked::after{content:'';width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
-.done .line{text-decoration:line-through;color:var(--muted)}
+.done .line,.done .cell:not(select),.done .title-in{text-decoration:line-through;color:var(--muted)}
+.search{width:100%;border:1px solid var(--line);border-radius:999px;padding:10px 16px;background:#fff;font-size:.95rem;outline:none;margin-bottom:14px}
+.search:focus{border-color:var(--brass)}
 
 /* Big 3 */
 .big3{border:1px solid var(--brass);border-radius:10px;padding:4px 12px;margin-bottom:8px;background:#fff}
@@ -84,6 +96,19 @@ textarea.box:focus,.cell:focus{border-color:var(--brass)}
 .water{display:flex;gap:5px;flex-wrap:wrap}
 .drop{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--brass);background:#fff;font-size:.72rem;color:var(--brass)}
 .drop.on{background:var(--brass);color:#fff}
+
+/* Pickers */
+.rate,.pick{display:flex;gap:5px;flex-wrap:wrap}
+.rate button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--brass);background:#fff;color:var(--brass);font-size:.78rem;font-weight:600}
+.rate button.on{background:var(--brass);color:#fff}
+.pick button{min-width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:1.25rem;padding:0 8px}
+.pick button.on{border-color:var(--brass);background:#fbf1de}
+.pick.small button{min-width:34px;height:34px;font-size:.85rem;font-weight:700;color:var(--brass2)}
+.pick.small button.on{background:var(--brass);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:.82rem;color:var(--ink2)}
+.chip.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.chip.add{border-style:dashed;border-color:var(--brass);color:var(--brass2)}
 
 /* Schedule */
 .sched{border:1px solid var(--brass);border-radius:10px;overflow:hidden;background:#fff}
@@ -108,10 +133,6 @@ textarea.box:focus,.cell:focus{border-color:var(--brass)}
 .weekday .tasks .row:last-child{border-bottom:0}
 .weekday .tasks .line{border:0}
 
-/* Rating */
-.rate{display:flex;gap:5px;flex-wrap:wrap}
-.rate button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--brass);background:#fff;color:var(--brass);font-size:.78rem;font-weight:600}
-.rate button.on{background:var(--brass);color:#fff}
 .scoreline{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .scoreline:last-child{border-bottom:0}
 .scoreline b{font-size:.92rem}
@@ -122,9 +143,11 @@ textarea.box:focus,.cell:focus{border-color:var(--brass)}
 .cal .dow{font-size:.65rem;font-weight:700;color:var(--brass);text-align:center;padding:6px 0;letter-spacing:.1em;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--stone)}
 .cal .c{min-height:74px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px 6px;text-align:left;background:#fff;border-top:0;border-left:0;position:relative;display:flex;flex-direction:column;gap:2px}
 .cal .c.empty{background:var(--stone)}
-.cal .c .n{font-weight:700;font-size:.82rem}
+.cal .c .n{font-weight:700;font-size:.82rem;display:flex;justify-content:space-between}
 .cal .c.today{box-shadow:inset 0 0 0 2px var(--brass)}
+.cal .c.sel{background:#fbf1de}
 .cal .c .dots{font-size:.62rem;color:var(--muted);line-height:1.2;overflow:hidden}
+.cal .c .big{font-size:1.5rem;line-height:1.1}
 .cal .c .bar{height:3px;border-radius:2px;background:var(--line);margin-top:auto}
 .cal .c .bar i{display:block;height:100%;background:var(--ok);border-radius:2px}
 
@@ -136,36 +159,78 @@ table.hg th.name{text-align:left;min-width:150px;position:sticky;left:0;backgrou
 table.hg td{padding:2px;text-align:center}
 table.hg td.name{position:sticky;left:0;background:var(--paper);padding-right:8px}
 table.hg td.name input{border:0;border-bottom:1px solid var(--line);background:transparent;width:150px;padding:6px 2px;font-size:.85rem;outline:none}
-.hcell{width:24px;height:24px;border:1px solid var(--line);border-radius:4px;background:#fff;padding:0}
-.hcell.on{background:var(--ok);border-color:var(--ok)}
+.hcell{width:24px;height:24px;border:1px solid var(--line);border-radius:4px;background:#fff;padding:0;font-size:.62rem;color:var(--muted)}
+.hcell.on{background:var(--ok);border-color:var(--ok);color:#fff}
 .hcell.today{border-color:var(--brass);border-width:2px}
+.hcell.big{width:auto;height:44px;font-size:.8rem;font-weight:700}
+.daygrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 table.hg td.pct{font-weight:700;color:var(--brass);padding-left:8px}
 
-/* Finance */
+/* Tables */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table.fin{width:100%;border-collapse:collapse;font-size:.88rem}
-table.fin th{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-align:left;padding:6px 4px;border-bottom:1.5px solid var(--brass)}
-table.fin td{border-bottom:1px solid var(--line);padding:0}
-.cell{width:100%;border:1px solid transparent;background:transparent;padding:8px 4px;outline:none;border-radius:4px}
-.cell.num{text-align:right}
+table.fin th{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-align:left;padding:6px 4px;border-bottom:1.5px solid var(--brass);white-space:nowrap}
+table.fin td{border-bottom:1px solid var(--line);padding:0;vertical-align:middle}
+.cell{width:100%;min-width:60px;border:1px solid transparent;background:transparent;padding:8px 4px;outline:none;border-radius:4px}
+.cell.num{text-align:right;min-width:70px}
+select.cell{-webkit-appearance:none;appearance:none;color:var(--ink2);min-width:84px}
+input[type=date].cell{min-width:120px}
 table.fin td.x{width:34px;text-align:center}
-table.fin td.x button{border:0;background:none;color:var(--muted);font-size:1rem;padding:6px}
-table.fin td.c{width:44px;text-align:center}
-.fin-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.x button,.del{border:0;background:none;color:var(--muted);font-size:1.1rem;padding:6px 8px}
+table.fin td.c{width:40px;text-align:center}
+table.fin td.calc{white-space:nowrap;padding:0 6px;font-size:.82rem;color:var(--ink2)}
+.fin-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
 .add{background:none;border:1px dashed var(--brass);color:var(--brass2);border-radius:999px;padding:6px 14px;font-size:.8rem;font-weight:600}
 .total{font-weight:700;font-size:.95rem}
-.total span{font-size:.66rem;letter-spacing:.1em;color:var(--brass);margin-right:8px}
+.total span{font-size:.64rem;letter-spacing:.1em;color:var(--brass);margin-right:8px}
 .summary{background:var(--ink);color:#fff;border-radius:14px;padding:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .summary div small{display:block;font-size:.62rem;letter-spacing:.14em;color:var(--brass);font-weight:700}
 .summary div strong{font-family:var(--serif);font-size:1.7rem;font-weight:400}
-.neg{color:#f2a597}
+.neg{color:#f2a597 !important}
+.pbar{display:inline-block;width:70px;height:6px;border-radius:3px;background:var(--line);vertical-align:middle;margin-right:4px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--ok)}
+.empty{text-align:center;padding:12px 0;margin:0}
+
+/* Item cards */
+.item{background:#fff}
+.item-head{display:flex;align-items:center;gap:8px}
+.title-in{flex:1;border:0;border-bottom:1px solid var(--line);font-family:var(--serif);font-size:1.2rem;padding:6px 2px;background:transparent;outline:none;min-width:0}
+.title-in:focus{border-bottom-color:var(--brass)}
+.item-meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin:8px 0 2px}
+.mf{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.mf .cell{min-width:0;width:auto;font-size:.88rem;text-transform:none;letter-spacing:0;font-weight:400;border-bottom:1px solid var(--line);border-radius:0}
+.mb{margin-top:10px}
+.mb .label{margin-bottom:4px}
+.pin{color:var(--brass)}
+
+/* Faith */
+.verse{background:var(--ink);color:#fff;border:0}
+.verse blockquote{font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.45;margin:4px 0 8px}
+.verse cite{color:var(--brass);font-style:normal;font-weight:700;font-size:.8rem;letter-spacing:.08em}
+.gratday{border-bottom:1px solid var(--line);padding:8px 0}
+.gratday:last-child{border-bottom:0}
+.gratday a{font-size:.72rem;font-weight:700;color:var(--brass);letter-spacing:.08em;text-transform:uppercase}
+
+/* Timer */
+.timer{width:220px;height:220px;border-radius:50%;margin:10px auto 18px;display:grid;place-items:center;position:relative}
+.timer-in{width:190px;height:190px;border-radius:50%;background:var(--ink);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.timer-in small{font-size:.65rem;letter-spacing:.2em;color:var(--brass);font-weight:700}
+.timer-in b{font-size:3rem;font-weight:600;font-variant-numeric:tabular-nums}
+.timer-in span{font-size:.75rem;color:rgba(255,255,255,.55)}
+.center{text-align:center}
 
 /* Buttons */
 .btn{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:11px 20px;font-weight:600;font-size:.9rem}
 .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
 .btn.danger{background:#fff;color:var(--danger);border:1px solid #e8c3bd}
+.btn.sm{padding:7px 14px;font-size:.8rem}
 .muted{color:var(--muted);font-size:.85rem;line-height:1.5}
 .quote{font-family:var(--serif);font-style:italic;text-align:center;color:var(--ink2);margin:24px 0 4px}
 .focusline{font-family:var(--serif);font-style:italic;color:var(--ink2);font-size:1rem}
+.plate .row{padding:6px 0;border-bottom:1px solid var(--line)}
+.plate .row:last-child{border-bottom:0}
+.tag{font-size:.65rem;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:999px;background:var(--stone);color:var(--ink2);white-space:nowrap}
+.tag.red{background:#f6e1dd;color:var(--danger)}
 </style>
 </head>
 <body>
@@ -183,13 +248,14 @@ table.fin td.c{width:44px;text-align:center}
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   The Living Planner — Daily (local-only edition)
-   All data lives in this browser's localStorage under one key.
+   The Living Planner — local edition
+   Every entry lives in this browser's localStorage under one key.
 ═══════════════════════════════════════════════════════════════ */
 const KEY = 'tlp.daily.v1';
 const TABS = [
   ['today','Today'],['week','Week'],['month','Month'],['habits','Habits'],
-  ['finance','Finance'],['setup','Setup'],['review','Review'],['backup','Backup']
+  ['faith','Faith'],['wellness','Wellness'],['finance','Finance'],['lists','Lists'],
+  ['life','Life'],['notes','Notes'],['reflect','Setup & Review'],['backup','Backup']
 ];
 const AREAS = [
   ['Faith','Prayer, scripture, spiritual presence'],['Health','Movement, sleep, nutrition, energy'],
@@ -198,11 +264,74 @@ const AREAS = [
   ['Lifestyle','Home, environment, rhythms'],['Relationships','Family, friendships, community']
 ];
 const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const MOODS = [[1,'😞','Low'],[2,'😕','Down'],[3,'😐','Okay'],[4,'🙂','Good'],[5,'😄','Great']];
+const moodIcon = (n) => (MOODS.find(m => m[0] === Number(n)) || [])[1] || '';
+
+const VERSES = [
+  ["Trust in the Lord with all your heart, and do not lean on your own understanding.","Proverbs 3:5"],
+  ["I can do all things through Christ who strengthens me.","Philippians 4:13"],
+  ["For God so loved the world that he gave his one and only Son.","John 3:16"],
+  ["Be still, and know that I am God.","Psalm 46:10"],
+  ["And we know that in all things God works for the good of those who love him.","Romans 8:28"],
+  ["The Lord is my shepherd; I shall not want.","Psalm 23:1"],
+  ["Wait on the Lord; be of good courage, and He shall strengthen your heart.","Psalm 27:14"],
+  ["Do not be anxious about anything, but in every situation by prayer and petition present your requests to God.","Philippians 4:6"],
+  ["Cast all your anxiety on him because he cares for you.","1 Peter 5:7"],
+  ["Therefore do not worry about tomorrow, for tomorrow will worry about itself.","Matthew 6:34"],
+  ["Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.","Joshua 1:9"],
+  ["The Lord will fight for you; you need only to be still.","Exodus 14:14"],
+  ["Come to me, all you who are weary and burdened, and I will give you rest.","Matthew 11:28"],
+  ["Greater love has no one than this: to lay down one's life for one's friends.","John 15:13"],
+  ["I have fought the good fight, I have finished the race, I have kept the faith.","2 Timothy 4:7"],
+  ["Above all else, guard your heart, for everything you do flows from it.","Proverbs 4:23"],
+  ["Commit to the Lord whatever you do, and he will establish your plans.","Proverbs 16:3"],
+  ["Many are the plans in a person's heart, but it is the Lord's purpose that prevails.","Proverbs 19:21"],
+  ["She is clothed with strength and dignity; she can laugh at the days to come.","Proverbs 31:25"],
+  ["In their hearts humans plan their course, but the Lord establishes their steps.","Proverbs 16:9"],
+  ["Train up a child in the way he should go; even when he is old he will not depart from it.","Proverbs 22:6"],
+  ["Two are better than one, because they have a good return for their labor.","Ecclesiastes 4:9"],
+  ["There is a time for everything, and a season for every activity under the heavens.","Ecclesiastes 3:1"],
+  ["Now faith is confidence in what we hope for and assurance about what we do not see.","Hebrews 11:1"],
+  ["Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.","Galatians 6:9"],
+  ["But seek first his kingdom and his righteousness, and all these things will be given to you as well.","Matthew 6:33"],
+  ["Where your treasure is, there your heart will be also.","Matthew 6:21"],
+  ["Whatever you do, work at it with all your heart, as working for the Lord, not for human masters.","Colossians 3:23"],
+  ["Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.","Ephesians 4:32"],
+  ["Therefore, my beloved brothers, be steadfast, immovable, always abounding in the work of the Lord.","1 Corinthians 15:58"],
+  ["For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you.","Jeremiah 29:11"]
+];
+const JOURNAL_PROMPTS = [
+  'What is weighing on me right now, and what part of it can I actually control?',
+  'Where did I see God at work this week?',
+  'What am I avoiding, and why?',
+  'What would make tomorrow a win?',
+  'Who do I need to forgive, or ask forgiveness from?',
+  'What drained my energy today? What restored it?',
+  'What am I most grateful for in this season?',
+  'What is one thing I want to stop doing?',
+  'What did I learn about myself this week?',
+  'What does faithfulness look like in my work right now?'
+];
+const COPING = {
+  'Distractions': ['Clean or organize your space','Go for a walk','Go for a drive','Listen to music','Play a game','Read','Take a shower or bath','Watch something funny','Write','Draw or doodle','Garden','Take a break'],
+  'Cognitive coping': ['Make a gratitude list','Read an inspirational quote','Slowly count to ten','Use positive self-talk','Think about someone you love','Visualize your favorite place','Brainstorm solutions','Write pros and cons','Write a list of strengths','Pray or read scripture'],
+  'Tension releasers': ['Stretch','Exercise','Breathe 4-7-8','Laugh','Cry','Use a stress ball','Chew gum']
+};
+const CLEAN = {
+  daily: ['Make beds','Do laundry','Take out trash','Load/unload dishwasher','Clean countertops','Tidy shared spaces','Wipe sinks & toilets','Spot vacuum'],
+  weekly: ['Vacuum/mop all floors','Wash bedding','Clean mirrors','Dust furniture','Clean stovetop','Clean microwave','Wipe kitchen cabinets','Wash dish towels','Scrub toilets','Clean shower','Vacuum rugs & upholstery','Empty all trash cans','Straighten closets & drawers'],
+  monthly: ['Clean out fridge & freezer','Tidy pantry','Wash bath mats & shower curtain','Wipe cabinet fronts','Clean doors & walls','Dust fans & light fixtures','Clean baseboards','Organize junk drawer','Deep clean shower head','Restock toiletries','Wash blankets','Clean under couch','Restock cleaning supplies'],
+  quarterly: ['Wash windows inside & out','Purge closets — donate','Flip mattresses','Deep clean oven','Deep clean fridge interior','Organize inside cabinets','Replace sponges','Deep clean trash cans','Wash comforters','Vacuum vents','Scrub tile grout','Check pantry for expired items'],
+  yearly: ['Professional carpet clean','Dust fridge vent','AC tune-up','Wash walls','Rinse window screens','Scrub blinds','Deep clean dishwasher','Polish wood cabinets','Clean dryer vent hose','Clean washer gasket']
+};
+const SHOP_QUICK = ['Milk','Eggs','Bread','Chicken','Ground beef','Rice','Bananas','Apples','Spinach','Onions','Coffee','Yogurt','Cheese','Paper towels','Toilet paper','Dish soap','Dog food','Water'];
 
 // ── State ──────────────────────────────────────────────────────
 let S = load();
 let tab = sessionGet('tab') || 'today';
 let cursor = sessionGet('cursor') || iso(new Date());
+let subs = {}; try { subs = JSON.parse(sessionGet('subs') || '{}') } catch(e){}
+let pendingFocus = null;
 
 function load(){
   try { const raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw) } catch(e){}
@@ -212,17 +341,21 @@ let saveTimer;
 function save(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(S));
-      flash('Saved on this iPad');
-    } catch(e){ flash('⚠ Could not save — storage full or blocked'); }
-  }, 250);
+    try { localStorage.setItem(KEY, JSON.stringify(S)); flash('Saved on this iPad') }
+    catch(e){ flash('⚠ Could not save — storage full or blocked') }
+  }, 150);
 }
-function flash(t){ const el = document.getElementById('saved'); el.textContent = t; el.style.opacity = 1 }
+// Write immediately when the app is closed, backgrounded, or switched away from
+function flush(){ clearTimeout(saveTimer); try { localStorage.setItem(KEY, JSON.stringify(S)) } catch(e){} }
+addEventListener('pagehide', flush);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush() });
+document.addEventListener('focusout', flush);
+// If another Safari tab of this planner saves, pick up its changes instead of overwriting them
+addEventListener('storage', (e) => { if (e.key === KEY && e.newValue) { S = JSON.parse(e.newValue); render(true) } });
+function flash(t){ document.getElementById('saved').textContent = t }
 function sessionGet(k){ try { return sessionStorage.getItem('tlp.'+k) } catch(e){ return null } }
 function sessionSet(k,v){ try { sessionStorage.setItem('tlp.'+k, v) } catch(e){} }
 
-// Path helpers: "days.2026-10-19.big3.0"
 function getP(path, dflt=''){
   let o = S;
   for (const k of path.split('.')) { if (o == null || typeof o !== 'object' || !(k in o)) return dflt; o = o[k] }
@@ -238,367 +371,733 @@ function delP(path){
   for (let i=0;i<ks.length-1;i++){ o = o?.[ks[i]]; if (!o) return }
   delete o[ks.at(-1)]; save();
 }
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+const items = (base) => Object.entries(getP(base,{}) || {}).filter(([,v]) => v && typeof v === 'object');
 
-// ── Date helpers ───────────────────────────────────────────────
+// ── Dates ──────────────────────────────────────────────────────
 function iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` }
-function parse(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d) }
+function parse(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d||1) }
 function addDays(s,n){ const d = parse(s); d.setDate(d.getDate()+n); return iso(d) }
 function weekStart(s){ const d = parse(s); d.setDate(d.getDate() - d.getDay()); return iso(d) }
-function monthKey(s){ return s.slice(0,7) }
+const monthKey = (s) => s.slice(0,7);
 function daysInMonth(mk){ const [y,m] = mk.split('-').map(Number); return new Date(y, m, 0).getDate() }
 function fmt(s, opts){ return parse(s).toLocaleDateString('en-US', opts) }
-function monthName(mk){ return fmt(mk+'-01', {month:'long'}) }
+const monthName = (mk) => fmt(mk+'-01', {month:'long'});
 const TODAY = () => iso(new Date());
+const monthDays = (mk) => Array.from({length:daysInMonth(mk)}, (_,i) => `${mk}-${String(i+1).padStart(2,'0')}`);
+function daysUntil(dateStr){
+  if (!dateStr) return 9999;
+  const t = parse(TODAY()), [,m,d] = dateStr.split('-').map(Number);
+  let next = new Date(t.getFullYear(), m-1, d);
+  if (next < t) next = new Date(t.getFullYear()+1, m-1, d);
+  return Math.round((next - t) / 86400000);
+}
+function verseFor(d){ const n = Math.floor((parse(d) - new Date(parse(d).getFullYear(),0,0)) / 86400000); return VERSES[n % VERSES.length] }
 
-// ── Small render helpers ───────────────────────────────────────
+// ── Render helpers ─────────────────────────────────────────────
 const esc = (v) => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const line = (p, ph='') => `<input class="line" data-p="${p}" value="${esc(getP(p))}" placeholder="${esc(ph)}">`;
 const area = (p, ph='', rows=3) => `<textarea class="box" rows="${rows}" data-p="${p}" placeholder="${esc(ph)}">${esc(getP(p))}</textarea>`;
-const chk = (p) => `<input type="checkbox" class="chk" data-p="${p}" ${getP(p,false) ? 'checked' : ''}>`;
-const rate = (p) => `<div class="rate" data-rate="${p}">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button type="button" data-n="${n}" class="${Number(getP(p,0))===n?'on':''}">${n}</button>`).join('')}</div>`;
+const chk = (p, done=false) => `<input type="checkbox" class="chk" data-p="${p}" ${done?'data-done="1"':''} ${getP(p,false) ? 'checked' : ''}>`;
+const pick = (p, opts, cls='pick') => { const cur = Number(getP(p,0)); return `<div class="${cls}" data-rate="${p}">${opts.map(([v,l,t])=>`<button type="button" data-n="${v}" class="${cur===v?'on':''}" ${t?`title="${t}" aria-label="${t}"`:''}>${l}</button>`).join('')}</div>` };
+const rate = (p) => pick(p, [1,2,3,4,5,6,7,8,9,10].map(n=>[n,n]), 'rate');
 const label = (t, sub='') => `<p class="label">${t}${sub ? ` <small>${sub}</small>` : ''}</p>`;
+const card = (t, inner, sub='', extra='') => `<div class="card" ${extra}>${t ? label(t,sub) : ''}${inner}</div>`;
 const money = (n) => (n<0?'-':'') + '$' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
-const num = (v) => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g,'')); return isNaN(n) ? 0 : n };
+const num = (v) => { const n = parseFloat(String(v ?? '').replace(/[^0-9.\-]/g,'')); return isNaN(n) ? 0 : n };
+const head = (title, sub, nav='') => `<div class="head"><div><h1>${title}</h1><div class="sub-t">${sub}</div></div>${nav}</div>`;
+const dayNav = () => `<div class="nav"><button data-act="day" data-n="-1" aria-label="Previous day">‹</button><button class="${cursor===TODAY()?'solid':''}" data-act="goto" data-d="${TODAY()}">Today</button><button data-act="day" data-n="1" aria-label="Next day">›</button></div>`;
+const monthNav = () => `<div class="nav"><button data-act="month" data-n="-1" aria-label="Previous month">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1" aria-label="Next month">›</button></div>`;
+const kpis = (list) => `<div class="kpis">${list.map(([l,v])=>`<div class="kpi"><small>${l}</small><strong>${v}</strong></div>`).join('')}</div>`;
+const calc = (name, attrs) => `<span data-calc="${name}" ${Object.entries(attrs).map(([k,v])=>`data-${k}="${esc(v)}"`).join(' ')}></span>`;
+function subnav(group, list){
+  let cur = subs[group]; if (!list.some(([k]) => k === cur)) cur = list[0][0];
+  return [cur, `<div class="subtabs">${list.map(([k,l])=>`<button class="sub ${k===cur?'on':''}" data-sub="${group}:${k}">${l}</button>`).join('')}</div>`];
+}
+const habitNames = (mk) => Array.from({length:8}, (_,i) => getP(`months.${mk}.habits.${i}`));
 
-// Habit names for a month (8 slots)
-function habitNames(mk){ return Array.from({length:8}, (_,i) => getP(`months.${mk}.habits.${i}`)) }
+// Generic field
+function field(p, f){
+  const v = getP(p);
+  switch (f.t) {
+    case 'check':  return chk(p, f.done);
+    case 'area':   return `<textarea class="box" rows="${f.rows||3}" data-p="${p}" placeholder="${esc(f.ph||'')}">${esc(v)}</textarea>`;
+    case 'select': return `<select class="cell" data-p="${p}">${['', ...f.opts].map(o=>`<option value="${esc(o)}" ${o===v?'selected':''}>${esc(o || f.ph || '—')}</option>`).join('')}</select>`;
+    case 'date':   return `<input type="date" class="cell" data-p="${p}" value="${esc(v)}">`;
+    case 'num':    return `<input class="cell num" inputmode="decimal" data-p="${p}" value="${esc(v)}" placeholder="${esc(f.ph||'')}">`;
+    case 'calc':   return calc(f.calc, { row: p.split('.').slice(0,-1).join('.'), ...(f.args||{}) });
+    default:       return `<input class="cell" data-p="${p}" value="${esc(v)}" placeholder="${esc(f.ph||'')}">`;
+  }
+}
+const addBtn = (base, text, init={}, cls='add') => `<button class="${cls}" data-act="addrow" data-p="${base}" data-init="${esc(JSON.stringify(init))}">+ ${text}</button>`;
+
+// Table list (compact rows)
+function tableList(base, fields, o={}){
+  let rows = items(base).sort((a,b)=>a[0].localeCompare(b[0]));
+  if (o.newest) rows.reverse();
+  if (o.sort) rows.sort(o.sort);
+  const doneF = fields.find(f=>f.done);
+  const body = rows.map(([id,r]) => `<tr class="donable ${doneF && r[doneF.k] ? 'done' : ''}">${fields.map(f =>
+      `<td class="${f.t==='check'?'c':''} ${f.t==='calc'?'calc':''}" ${f.w?`style="width:${f.w}"`:''}>${field(`${base}.${id}.${f.k}`, f)}</td>`).join('')}
+      <td class="x"><button data-act="delrow" data-p="${base}.${id}" aria-label="Delete row">×</button></td></tr>`).join('');
+  return `<div class="tbl-wrap"><table class="fin"><tr>${fields.map(f=>`<th>${f.h||''}</th>`).join('')}<th></th></tr>${body}</table></div>
+    ${rows.length ? '' : `<p class="muted empty">${o.empty || 'Nothing here yet.'}</p>`}
+    <div class="fin-foot">${addBtn(base, o.add || 'Add row', o.init || {})}${o.foot || ''}</div>`;
+}
+
+// Card list (longer entries)
+function cardList(base, fields, o={}){
+  let rows = items(base).sort((a,b)=>a[0].localeCompare(b[0])).reverse();
+  if (o.sort) rows.sort(o.sort);
+  const titleF = fields.find(f=>f.title), doneF = fields.find(f=>f.done);
+  const html = rows.map(([id,r]) => {
+    const P = `${base}.${id}`;
+    const meta = fields.filter(f => !f.title && !f.block), blocks = fields.filter(f => f.block);
+    return `<div class="card item donable ${doneF && r[doneF.k] ? 'done' : ''}" data-sitem>
+      <div class="item-head">${titleF ? `<input class="title-in" data-p="${P}.${titleF.k}" value="${esc(r[titleF.k])}" placeholder="${esc(titleF.ph||'Title')}">` : ''}
+        <button class="del" data-act="delrow" data-confirm="1" data-p="${P}" aria-label="Delete">×</button></div>
+      ${meta.length ? `<div class="item-meta">${meta.map(f=>`<label class="mf">${f.h ? `<span>${f.h}</span>` : ''}${field(`${P}.${f.k}`, f)}</label>`).join('')}</div>` : ''}
+      ${blocks.map(f=>`<div class="mb">${f.h ? label(f.h) : ''}${field(`${P}.${f.k}`, f)}</div>`).join('')}
+    </div>`;
+  }).join('');
+  return `<div class="fin-foot" style="margin:0 0 12px">${addBtn(base, o.add || 'New', o.init || {}, 'btn')}${o.foot || ''}</div>
+    ${html || `<p class="muted empty">${o.empty || 'Nothing here yet.'}</p>`}`;
+}
+const doneLast = (k) => (a,b) => (!!a[1][k] - !!b[1][k]);
+
+// ── Live calculations (update without re-render) ───────────────
+const sumOf = (base, k, filter) => items(base).filter(([,r]) => !filter || filter(r)).reduce((s,[,r]) => s + num(r[k]), 0);
+function finTotals(mk){
+  const b = `months.${mk}.fin`;
+  const income = sumOf(`${b}.income`,'amt'), bills = sumOf(`${b}.bills`,'amt'), exp = sumOf(`${b}.exp`,'amt');
+  return { income, bills, exp, inc: income, out: bills + exp, net: income - bills - exp };
+}
+const CALC = {
+  sum:    (el) => money(sumOf(el.dataset.base, el.dataset.k, el.dataset.prefix ? (r) => String(r.date||'').startsWith(el.dataset.prefix) : null)),
+  fin:    (el) => { const t = finTotals(el.dataset.mk); el.classList.toggle('neg', el.dataset.w === 'net' && t.net < 0); return money(t[el.dataset.w]) },
+  pct:    (el) => { const r = getP(el.dataset.row,{}); const a = num(r[el.dataset.a]), b = num(r[el.dataset.b]); const p = b ? Math.min(100, Math.round(a/b*100)) : 0; return `<span class="pbar"><i style="width:${p}%"></i></span>${p}%` },
+  left:   (el) => { const r = getP(el.dataset.row,{}); return money(Math.max(0, num(r[el.dataset.b]) - num(r[el.dataset.a]))) },
+  until:  (el) => { const r = getP(el.dataset.row,{}); if (!r.date) return '—'; const n = daysUntil(r.date); return n === 0 ? '🎂 Today' : n === 1 ? 'Tomorrow' : `${n} days` },
+  ticks:  (el) => { const o = getP(el.dataset.base,{}) || {}; const n = Object.values(o).filter(v => v === true).length; return el.dataset.of ? `${n} / ${el.dataset.of}` : String(n) },
+  rowsDone:(el) => { const r = items(el.dataset.base); return `${r.filter(([,x]) => x[el.dataset.k]).length} / ${r.length}` },
+  sleepAvg:(el) => { const v = monthDays(el.dataset.mk).map(d => num(getP(`days.${d}.sleepHrs`))).filter(n => n > 0); return v.length ? (v.reduce((a,b)=>a+b,0)/v.length).toFixed(1) + ' hrs' : '—' }
+};
+function refreshCalcs(){ document.querySelectorAll('[data-calc]').forEach(el => { const f = CALC[el.dataset.calc]; if (f) el.innerHTML = f(el) }) }
 
 // ── Banners ────────────────────────────────────────────────────
 function banners(){
   let out = '';
   const standalone = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
   if (!standalone) out += `<div class="banner"><div><b>Add this to your Home Screen.</b> Tap Share → Add to Home Screen, then always open it from that icon. That keeps Safari from clearing your entries.</div></div>`;
-  const hasData = Object.keys(S.days).length > 0;
+  const hasData = Object.keys(S.days || {}).length > 0;
   const last = S.meta?.lastBackup;
   const stale = !last || (Date.now() - new Date(last).getTime()) > 7*86400000;
-  if (hasData && stale) out += `<div class="banner"><div><b>Back up your planner.</b> ${last ? 'Last backup: ' + new Date(last).toLocaleDateString() + '.' : 'No backup yet.'} Saves a copy to Files / iCloud Drive.</div><button class="btn" data-act="export">Back up</button></div>`;
+  if (hasData && stale) out += `<div class="banner"><div><b>Back up your planner.</b> ${last ? 'Last backup: ' + new Date(last).toLocaleDateString() + '.' : 'No backup yet.'} Saves a copy to Files / iCloud Drive.</div><button class="btn sm" data-act="export">Back up</button></div>`;
   return out;
 }
 
-// ── Views ──────────────────────────────────────────────────────
+/* ═══════════════════ TODAY ═══════════════════ */
 function viewToday(){
   const d = cursor, mk = monthKey(d), ws = weekStart(d), P = `days.${d}`;
   const names = habitNames(mk);
   const weekFocus = getP(`weeks.${ws}.focus`);
   const water = Number(getP(`${P}.water`,0));
-  const yday = parse(d); const start = new Date(yday.getFullYear(),0,0);
-  const dayNum = Math.round((yday - start)/86400000);
+  const dayNum = Math.round((parse(d) - new Date(parse(d).getFullYear(),0,0))/86400000);
+
+  // On your plate: to-dos due/overdue + upcoming birthdays
+  const todos = items('lists.todo').filter(([,r]) => r.due && (r.due === d || (r.due < d && !r.done && d === TODAY())));
+  const bdays = d === TODAY() ? items('life.birthdays').filter(([,r]) => r.date && daysUntil(r.date) <= 7).sort((a,b)=>daysUntil(a[1].date)-daysUntil(b[1].date)) : [];
+  const plate = (todos.length || bdays.length) ? card('On your plate', `<div class="plate">
+      ${todos.map(([id,r]) => `<div class="row donable ${r.done?'done':''}">${chk(`lists.todo.${id}.done`, true)}<input class="line" style="border:0" data-p="lists.todo.${id}.task" value="${esc(r.task)}">${r.due < d ? '<span class="tag red">Overdue</span>' : ''}${r.pri ? `<span class="tag">${esc(r.pri)}</span>` : ''}</div>`).join('')}
+      ${bdays.map(([,r]) => `<div class="row"><span>🎂</span><span style="flex:1">${esc(r.name)}</span><span class="tag">${daysUntil(r.date)===0 ? 'Today' : 'in ' + daysUntil(r.date) + ' days'}</span></div>`).join('')}
+    </div>`) : '';
+
+  const meds = items('wellness.meds').filter(([,m]) => m.name);
+  const routine = items('wellness.routine').filter(([,x]) => x.item);
 
   let slots = '';
   for (let h=6; h<22; h++) for (const m of ['00','30']) {
     const key = `${String(h).padStart(2,'0')}${m}`;
     const lab = `${h%12===0?12:h%12}${h<12?'a':'p'}`;
-    slots += `<div class="slot ${m==='30'?'half':''}"><div class="t">${m==='00'?lab:'·'}</div><input data-p="${P}.sched.${key}" value="${esc(getP(`${P}.sched.${key}`))}"></div>`;
+    slots += `<div class="slot ${m==='30'?'half':''}"><div class="t">${m==='00'?lab:'·'}</div><input data-p="${P}.sched.${key}" value="${esc(getP(`${P}.sched.${key}`))}" aria-label="${lab}${m==='30'?':30':''}"></div>`;
   }
 
   return `
-  <div class="head">
-    <div><h1>${fmt(d,{weekday:'long'})}</h1><div class="sub">${fmt(d,{month:'long',day:'numeric',year:'numeric'})} · Day ${dayNum}</div></div>
-    <div class="nav">
-      <button data-act="day" data-n="-1" aria-label="Previous day">‹</button>
-      <button class="${d===TODAY()?'solid':''}" data-act="goto" data-d="${TODAY()}">Today</button>
-      <button data-act="day" data-n="1" aria-label="Next day">›</button>
-    </div>
-  </div>
-  ${weekFocus ? `<div class="card"><p class="label">This week's focus</p><div class="focusline">${esc(weekFocus)}</div></div>` : ''}
+  ${head(fmt(d,{weekday:'long'}), `${fmt(d,{month:'long',day:'numeric',year:'numeric'})} · Day ${dayNum}`, dayNav())}
+  ${weekFocus ? card("This week's focus", `<div class="focusline">${esc(weekFocus)}</div>`) : ''}
+  ${plate}
   <div class="grid2">
     <div>
-      <div class="card">
-        ${label("Today's Big 3", 'the wins that make today matter')}
-        ${[0,1,2].map(i=>`<div class="big3 row ${getP(`${P}.big3done.${i}`,false)?'done':''}"><span class="num">${i+1}</span>${line(`${P}.big3.${i}`)}${chk(`${P}.big3done.${i}`)}</div>`).join('')}
-      </div>
-      <div class="card">
-        ${label('Habits', names.some(Boolean) ? '' : 'set your habits on the Habits tab')}
-        ${names.map((n,i)=> n ? `<div class="row" style="padding:6px 0">${chk(`${P}.habits.${i}`)}<span>${esc(n)}</span></div>` : '').join('') || '<p class="muted">No habits set for this month yet.</p>'}
-      </div>
-      <div class="card">
-        ${label('Water','8 × 8oz')}
-        <div class="water">${Array.from({length:8},(_,i)=>`<button class="drop ${i<water?'on':''}" data-act="water" data-n="${i+1}">${i+1}</button>`).join('')}</div>
-      </div>
-      <div class="card">
-        ${label('Gratitude','three things')}
-        ${[0,1,2].map(i=>line(`${P}.grat.${i}`, `${i+1}.`)).join('')}
-      </div>
-      <div class="card">
-        ${label('Scripture / Word for today')}
-        ${area(`${P}.scripture`,'Verse, reference, what it means for today…',3)}
-      </div>
-      <div class="card">
-        ${label('Notes')}
-        ${area(`${P}.notes`,'',4)}
-      </div>
+      ${card("Today's Big 3", [0,1,2].map(i=>`<div class="big3 row donable ${getP(`${P}.big3done.${i}`,false)?'done':''}"><span class="num">${i+1}</span>${line(`${P}.big3.${i}`)}${chk(`${P}.big3done.${i}`, true)}</div>`).join(''), 'the wins that make today matter')}
+      ${card('Mood & energy', `${pick(`${P}.mood`, MOODS)}<div style="height:10px"></div><div class="row"><span class="muted" style="width:56px">Energy</span>${pick(`${P}.energy`, [1,2,3,4,5].map(n=>[n,n]), 'pick small')}</div>`)}
+      ${card('Habits', names.map((n,i)=> n ? `<div class="row" style="padding:6px 0">${chk(`${P}.habits.${i}`)}<span>${esc(n)}</span></div>` : '').join('') || '<p class="muted" style="margin:0">Name your habits on the Habits tab.</p>')}
+      ${routine.length ? card('Routine', ['Morning','Evening'].map(w => { const r = routine.filter(([,x]) => (x.when||'Morning') === w); return r.length ? `<p class="muted" style="margin:6px 0 2px;font-weight:600">${w}</p>` + r.map(([id,x]) => `<div class="row donable ${getP(`${P}.routine.${id}`,false)?'done':''}" style="padding:4px 0">${chk(`${P}.routine.${id}`, true)}<span class="line" style="border:0">${esc(x.item)}</span></div>`).join('') : '' }).join('')) : ''}
+      ${meds.length ? card('Medications', meds.map(([id,m]) => `<div class="row" style="padding:5px 0">${chk(`${P}.meds.${id}`)}<span>${esc(m.name)} <span class="muted">${esc(m.dose||'')} ${esc(m.time||'')}</span></span></div>`).join('')) : ''}
+      ${card('Water', `<div class="water">${Array.from({length:8},(_,i)=>`<button class="drop ${i<water?'on':''}" data-act="water" data-n="${i+1}">${i+1}</button>`).join('')}</div>`, '8 × 8oz')}
+      ${card('Sleep', `<div class="row"><input class="cell num" style="width:80px;border-bottom:1px solid var(--line)" inputmode="decimal" data-p="${P}.sleepHrs" value="${esc(getP(`${P}.sleepHrs`))}" placeholder="7.5"><span class="muted">hours</span>${field(`${P}.sleepQ`, {t:'select', opts:['Poor','Fair','Okay','Good','Great'], ph:'Quality'})}</div>`, 'last night')}
+      ${card('Gratitude', [0,1,2].map(i=>line(`${P}.grat.${i}`, `${i+1}.`)).join(''), 'three things')}
+      ${card('Scripture / word for today', area(`${P}.scripture`,'Verse, reference, what it means for today…',3))}
+      ${card('Day notes', area(`${P}.notes`,'',4))}
     </div>
-    <div>
-      <div class="card">
-        ${label('Schedule','time-block your day')}
-        <div class="sched">${slots}</div>
-      </div>
-    </div>
+    <div>${card('Schedule', `<div class="sched">${slots}</div>`, 'time-block your day')}</div>
   </div>`;
 }
 
+/* ═══════════════════ WEEK ═══════════════════ */
 function viewWeek(){
   const ws = weekStart(cursor), we = addDays(ws,6), W = `weeks.${ws}`;
-  const rangeLabel = `${fmt(ws,{month:'short',day:'numeric'})} – ${fmt(we,{month:'short',day:'numeric'})}`;
   let days = '';
   for (let i=0;i<7;i++){
     const d = addDays(ws,i);
     days += `<div class="weekday">
       <div class="d ${i===0||i===6?'we':''}"><b>${DOW[i]}</b><span>${parse(d).getDate()}</span><a href="#" data-act="goto" data-open="1" data-d="${d}">open day</a></div>
-      <div class="tasks">${[0,1,2].map(r=>`<div class="row ${getP(`${W}.plan.${i}.${r}.done`,false)?'done':''}">${chk(`${W}.plan.${i}.${r}.done`)}${line(`${W}.plan.${i}.${r}.t`)}</div>`).join('')}</div>
+      <div class="tasks">${[0,1,2].map(r=>`<div class="row donable ${getP(`${W}.plan.${i}.${r}.done`,false)?'done':''}">${chk(`${W}.plan.${i}.${r}.done`, true)}${line(`${W}.plan.${i}.${r}.t`)}</div>`).join('')}</div>
     </div>`;
   }
   return `
-  <div class="head">
-    <div><h1>Week</h1><div class="sub">${rangeLabel}</div></div>
-    <div class="nav"><button data-act="day" data-n="-7">‹</button><button data-act="goto" data-d="${TODAY()}">This week</button><button data-act="day" data-n="7">›</button></div>
-  </div>
-  <div class="card" style="border-color:var(--brass)">
-    ${label("This week's focus",'the one thing that matters most')}
-    ${line(`${W}.focus`)}
-  </div>
+  ${head('Week', `${fmt(ws,{month:'short',day:'numeric'})} – ${fmt(we,{month:'short',day:'numeric'})}`,
+    `<div class="nav"><button data-act="day" data-n="-7">‹</button><button data-act="goto" data-d="${TODAY()}">This week</button><button data-act="day" data-n="7">›</button></div>`)}
+  ${card("This week's focus", line(`${W}.focus`), 'the one thing that matters most', 'style="border-color:var(--brass)"')}
   <div class="grid2 even">
     <div>${days}</div>
     <div>
-      <div class="card">${label('Wins','what went right this week')}${area(`${W}.wins`)}</div>
-      <div class="card">${label('Gratitude')}${area(`${W}.grat`)}</div>
-      <div class="card">${label('Faith & prayer','what God is teaching me / requests')}${area(`${W}.faith`)}</div>
-      <div class="card">${label("What I'm learning")}${area(`${W}.learn`)}</div>
-      <div class="card">${label('Next week — one thing')}${line(`${W}.next`)}</div>
-      <div class="card">${label('Week rating')}${rate(`${W}.rating`)}</div>
+      ${card('Wins', area(`${W}.wins`), 'what went right this week')}
+      ${card('Gratitude', area(`${W}.grat`))}
+      ${card('Faith & prayer', area(`${W}.faith`), 'what God is teaching me / requests')}
+      ${card("What I'm learning", area(`${W}.learn`))}
+      ${card('Next week — one thing', line(`${W}.next`))}
+      ${card('Week rating', rate(`${W}.rating`))}
     </div>
   </div>`;
 }
 
+/* ═══════════════════ MONTH ═══════════════════ */
 function viewMonth(){
   const mk = monthKey(cursor), M = `months.${mk}`, n = daysInMonth(mk);
   const first = parse(mk+'-01').getDay();
-  const names = habitNames(mk); const active = names.map((x,i)=>x?i:-1).filter(i=>i>=0);
+  const active = habitNames(mk).map((x,i)=>x?i:-1).filter(i=>i>=0);
   let cells = DOW.map(x=>`<div class="dow">${x}</div>`).join('');
   for (let i=0;i<first;i++) cells += `<div class="c empty"></div>`;
-  for (let day=1; day<=n; day++){
-    const d = `${mk}-${String(day).padStart(2,'0')}`;
-    const big = (getP(`days.${d}.big3.0`) || getP(`days.${d}.big3.1`) || '');
+  for (const d of monthDays(mk)){
+    const big = getP(`days.${d}.big3.0`) || getP(`days.${d}.big3.1`) || '';
     const doneH = active.filter(i=>getP(`days.${d}.habits.${i}`,false)).length;
     const pct = active.length ? Math.round(doneH/active.length*100) : 0;
     cells += `<button class="c ${d===TODAY()?'today':''}" data-act="goto" data-open="1" data-d="${d}">
-      <span class="n">${day}</span><span class="dots">${esc(big).slice(0,40)}</span>
-      ${active.length ? `<span class="bar"><i style="width:${pct}%"></i></span>` : ''}
-    </button>`;
+      <span class="n"><span>${parse(d).getDate()}</span><span>${moodIcon(getP(`days.${d}.mood`,0))}</span></span><span class="dots">${esc(big).slice(0,40)}</span>
+      ${active.length ? `<span class="bar"><i style="width:${pct}%"></i></span>` : ''}</button>`;
   }
   const trail = (7 - ((first + n) % 7)) % 7;
   for (let i=0;i<trail;i++) cells += `<div class="c empty"></div>`;
   return `
-  <div class="head">
-    <div><h1>${monthName(mk)}</h1><div class="sub">${mk.slice(0,4)} · tap a day to open it</div></div>
-    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
-  </div>
-  <div class="card"><div class="cal">${cells}</div></div>
+  ${head(monthName(mk), `${mk.slice(0,4)} · tap a day to open it`, monthNav())}
+  ${card('', `<div class="cal">${cells}</div>`)}
   <div class="grid3">
-    <div class="card">${label('Month focus')}${area(`${M}.focus`,'',5)}</div>
-    <div class="card">${label('Top 3 goals')}${[0,1,2].map(i=>line(`${M}.top.${i}`,`${i+1}.`)).join('')}</div>
-    <div class="card">${label('Must-do events')}${area(`${M}.events`,'',5)}</div>
+    ${card('Month focus', area(`${M}.focus`,'',5))}
+    ${card('Top 3 goals', [0,1,2].map(i=>line(`${M}.top.${i}`,`${i+1}.`)).join(''))}
+    ${card('Must-do events', area(`${M}.events`,'',5))}
   </div>`;
 }
 
+/* ═══════════════════ HABITS ═══════════════════ */
 function viewHabits(){
-  const mk = monthKey(cursor), n = daysInMonth(mk);
-  const names = habitNames(mk);
-  let head = `<tr><th class="name">Habit</th>${Array.from({length:n},(_,i)=>`<th>${i+1}</th>`).join('')}<th>%</th></tr>`;
+  const mk = monthKey(cursor), n = daysInMonth(mk), names = habitNames(mk);
+  const elapsed = monthKey(TODAY()) === mk ? parse(TODAY()).getDate() : (mk < monthKey(TODAY()) ? n : 0);
+  const headRow = `<tr><th class="name">Habit</th>${Array.from({length:n},(_,i)=>`<th>${i+1}</th>`).join('')}<th>%</th></tr>`;
   let rows = '';
   for (let h=0; h<8; h++){
     let done = 0, cells = '';
-    for (let day=1; day<=n; day++){
-      const d = `${mk}-${String(day).padStart(2,'0')}`;
-      const on = getP(`days.${d}.habits.${h}`,false); if (on) done++;
-      cells += `<td><button class="hcell ${on?'on':''} ${d===TODAY()?'today':''}" data-act="habit" data-d="${d}" data-h="${h}" aria-label="${d}"></button></td>`;
+    for (const d of monthDays(mk)){
+      const on = getP(`days.${d}.habits.${h}`,false); if (on && d <= TODAY()) done++;
+      cells += `<td><button class="hcell ${on?'on':''} ${d===TODAY()?'today':''}" data-act="toggle" data-p="days.${d}.habits.${h}" aria-label="${d}"></button></td>`;
     }
-    const elapsed = monthKey(TODAY()) === mk ? parse(TODAY()).getDate() : (mk < monthKey(TODAY()) ? n : 0);
-    const pct = names[h] && elapsed ? Math.round(done/elapsed*100) + '%' : '';
-    rows += `<tr><td class="name"><input data-p="months.${mk}.habits.${h}" value="${esc(names[h])}" placeholder="Habit ${h+1}"></td>${cells}<td class="pct">${pct}</td></tr>`;
+    rows += `<tr><td class="name"><input data-p="months.${mk}.habits.${h}" value="${esc(names[h])}" placeholder="Habit ${h+1}"></td>${cells}<td class="pct">${names[h] && elapsed ? Math.round(done/elapsed*100)+'%' : ''}</td></tr>`;
   }
   return `
-  <div class="head">
-    <div><h1>Habits</h1><div class="sub">${monthName(mk)} · what you do daily becomes who you are</div></div>
-    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
-  </div>
-  <div class="card"><p class="muted" style="margin-top:0">Name up to 8 habits. They show up as checkboxes on each day's page, and checking them in either place updates both.</p>
-    <div class="hg-wrap"><table class="hg">${head}${rows}</table></div></div>
-  <div class="card">${label("Patterns I notice / what's working")}${area(`months.${mk}.patterns`,'',4)}</div>`;
+  ${head('Habits', `${monthName(mk)} · what you do daily becomes who you are`, monthNav())}
+  ${card('', `<p class="muted" style="margin-top:0">Name up to 8 habits. They show up as checkboxes on each day's page, and checking them in either place updates both.</p><div class="hg-wrap"><table class="hg">${headRow}${rows}</table></div>`)}
+  ${card("Patterns I notice / what's working", area(`months.${mk}.patterns`,'',4))}`;
 }
 
-function finTable(mk, kind, cols){
-  const base = `months.${mk}.fin.${kind}`;
-  const rows = Object.entries(getP(base,{}) || {}).sort((a,b)=>a[0].localeCompare(b[0]));
-  const total = rows.reduce((s,[,r])=>s+num(r.amt),0);
-  const body = rows.map(([id])=>`<tr>${cols.map(c=> c.k==='paid'
-      ? `<td class="c">${chk(`${base}.${id}.paid`)}</td>`
-      : `<td><input class="cell ${c.k==='amt'?'num':''}" data-p="${base}.${id}.${c.k}" value="${esc(getP(`${base}.${id}.${c.k}`))}" placeholder="${c.ph||''}" ${c.k==='amt'?'inputmode="decimal"':''}></td>`).join('')}
-      <td class="x"><button data-act="delrow" data-p="${base}.${id}" aria-label="Delete row">×</button></td></tr>`).join('');
-  return `<table class="fin"><tr>${cols.map(c=>`<th style="${c.w?`width:${c.w}`:''}">${c.h}</th>`).join('')}<th></th></tr>${body}</table>
-    <div class="fin-foot"><button class="add" data-act="addrow" data-p="${base}">+ Add row</button>
-    <div class="total"><span>TOTAL</span><b data-total="${kind}">${money(total)}</b></div></div>`;
+/* ═══════════════════ FAITH ═══════════════════ */
+function viewFaith(){
+  const [s, nav] = subnav('faith', [['devo','Devotional'],['prayer','Prayer'],['scripture','Scripture'],['reading','Bible Reading'],['grat','Gratitude'],['fast','Fasting'],['sermons','Sermons'],['goals','Faith Goals']]);
+  const mk = monthKey(cursor);
+  let body = '';
+  if (s === 'devo') {
+    const [v, r] = verseFor(cursor), D = `days.${cursor}.devo`;
+    body = head('Devotional', fmt(cursor,{weekday:'long', month:'long', day:'numeric'}), dayNav())
+      + `<div class="card verse">${label('Verse of the day')}<blockquote>“${esc(v)}”</blockquote><cite>${esc(r)}</cite></div>`
+      + `<div class="grid2 even"><div>${card('What is God saying to me?', area(`${D}.say`,'',5))}${card('Application', area(`${D}.apply`,'How will I live this out today?',3))}</div>`
+      + `<div>${card('Prayer', area(`${D}.prayer`,'',5))}${card('Scripture I read', line(`${D}.read`,'e.g. John 15'))}</div></div>`;
+  }
+  if (s === 'prayer') {
+    body = head('Prayer journal', 'bring it to God, then watch what He does')
+      + kpis([['Active', items('faith.prayers').filter(([,r])=>!r.answered).length], ['Answered', items('faith.prayers').filter(([,r])=>r.answered).length]])
+      + cardList('faith.prayers', [
+          {k:'req', title:true, ph:'Prayer request'},
+          {k:'date', t:'date', h:'Date'},
+          {k:'type', t:'select', h:'Type', opts:['Request','Praise','Intercession','Confession','Thanksgiving']},
+          {k:'answered', t:'check', h:'Answered', done:true},
+          {k:'answer', t:'area', block:true, h:'How God answered', rows:2}
+        ], { add:'Prayer request', init:{date:TODAY(), type:'Request'}, sort: doneLast('answered') });
+  }
+  if (s === 'scripture') {
+    body = head('Scripture journal', 'verses to study, memorize, and carry')
+      + cardList('faith.scripture', [
+          {k:'ref', title:true, ph:'Reference — e.g. Romans 12:2'},
+          {k:'date', t:'date', h:'Date'},
+          {k:'memorized', t:'check', h:'Memorized'},
+          {k:'text', t:'area', block:true, h:'Verse', rows:2},
+          {k:'reflect', t:'area', block:true, h:'Reflection', rows:3}
+        ], { add:'Verse', init:{date:TODAY()} });
+  }
+  if (s === 'reading') {
+    const read = items('faith.reading').filter(([,r]) => String(r.date||'').startsWith(mk)).map(([,r]) => r.date);
+    body = head('Bible reading', `${monthName(mk)} log`, monthNav())
+      + kpis([['Days read this month', new Set(read).size], ['Total entries', items('faith.reading').length]])
+      + card('', tableList('faith.reading', [
+          {k:'date', t:'date', h:'Date', w:'140px'}, {k:'passage', h:'Passage', ph:'Genesis 1–3'}, {k:'notes', h:'Notes'}
+        ], { newest:true, add:'Reading', init:{date:TODAY()} }));
+  }
+  if (s === 'grat') {
+    const days = monthDays(mk).reverse().map(d => [d, [0,1,2].map(i => getP(`days.${d}.grat.${i}`)).filter(Boolean)]).filter(([,g]) => g.length);
+    body = head('Gratitude', `${monthName(mk)} · gathered from your daily pages`, monthNav())
+      + card('', days.length ? days.map(([d,g]) => `<div class="gratday"><a href="#" data-act="goto" data-open="1" data-d="${d}">${fmt(d,{weekday:'short', month:'short', day:'numeric'})}</a><div>${g.map(x=>`• ${esc(x)}`).join('<br>')}</div></div>`).join('') : '<p class="muted empty">No gratitude entries this month yet. Add them on the Today page.</p>');
+  }
+  if (s === 'fast') {
+    body = head('Fasting', 'discipline & consecration')
+      + cardList('faith.fasting', [
+          {k:'intent', title:true, ph:'Intention / purpose'},
+          {k:'type', t:'select', h:'Type', opts:['Full','Partial','Daniel','Water','Intermittent','Media','Other']},
+          {k:'start', t:'date', h:'Start'}, {k:'end', t:'date', h:'End'},
+          {k:'complete', t:'check', h:'Complete'},
+          {k:'notes', t:'area', block:true, h:'What God showed me', rows:3}
+        ], { add:'Fast', init:{start:TODAY()} });
+  }
+  if (s === 'sermons') {
+    body = head('Sermon notes', 'capture what God says')
+      + cardList('faith.sermons', [
+          {k:'title', title:true, ph:'Sermon title'},
+          {k:'date', t:'date', h:'Date'}, {k:'speaker', h:'Speaker', ph:'Pastor'}, {k:'text', h:'Text', ph:'Scripture'},
+          {k:'notes', t:'area', block:true, h:'Key points, quotes, insights', rows:6},
+          {k:'apply', t:'area', block:true, h:'How will I apply this?', rows:2}
+        ], { add:'Sermon notes', init:{date:TODAY()} });
+  }
+  if (s === 'goals') {
+    body = head('Faith goals', 'growing in the Spirit')
+      + card('', tableList('faith.goals', [
+          {k:'done', t:'check', h:'✓', done:true}, {k:'goal', h:'Goal', ph:'e.g. Read the New Testament'},
+          {k:'cat', t:'select', h:'Area', opts:['Prayer','Scripture','Church','Service','Fasting','Evangelism','Discipleship','Giving']}
+        ], { add:'Faith goal', sort: doneLast('done'), foot: `<span class="total"><span>DONE</span>${calc('rowsDone',{base:'faith.goals',k:'done'})}</span>` }));
+  }
+  return nav + body;
 }
-function finTotals(mk){
-  const sum = (k) => Object.values(getP(`months.${mk}.fin.${k}`,{})||{}).reduce((s,r)=>s+num(r.amt),0);
-  const inc = sum('income'), out = sum('bills') + sum('exp');
-  return { inc, out, net: inc - out, income: inc, bills: sum('bills'), exp: sum('exp') };
+
+/* ═══════════════════ WELLNESS ═══════════════════ */
+function viewWellness(){
+  const [s, nav] = subnav('wellness', [['mood','Mood'],['sleep','Sleep'],['journal','Journal'],['routine','Routine'],['meds','Medications'],['metrics','Body Metrics'],['symptoms','Anxiety & Pain'],['coping','Coping Skills'],['books','Reading']]);
+  const mk = monthKey(cursor), d = cursor;
+  let body = '';
+  if (s === 'mood') {
+    const vals = monthDays(mk).map(x => Number(getP(`days.${x}.mood`,0))).filter(Boolean);
+    const en = monthDays(mk).map(x => Number(getP(`days.${x}.energy`,0))).filter(Boolean);
+    const avg = (a) => a.length ? (a.reduce((x,y)=>x+y,0)/a.length).toFixed(1) : '—';
+    const first = parse(mk+'-01').getDay();
+    let cells = DOW.map(x=>`<div class="dow">${x}</div>`).join('') + '<div class="c empty"></div>'.repeat(first);
+    for (const x of monthDays(mk)) cells += `<button class="c ${x===TODAY()?'today':''} ${x===d?'sel':''}" data-act="goto" data-d="${x}"><span class="n"><span>${parse(x).getDate()}</span><span class="muted" style="font-size:.65rem">${getP(`days.${x}.energy`,0) ? '⚡'+getP(`days.${x}.energy`) : ''}</span></span><span class="big">${moodIcon(getP(`days.${x}.mood`,0))}</span></button>`;
+    body = head('Mood', `${monthName(mk)} · tap a day to log or change it`, monthNav())
+      + kpis([['Avg mood', vals.length ? `${avg(vals)} ${moodIcon(Math.round(avg(vals)))}` : '—'], ['Avg energy', avg(en)], ['Days logged', vals.length]])
+      + card(`Check-in · ${fmt(d,{weekday:'short', month:'short', day:'numeric'})}`, `${pick(`days.${d}.mood`, MOODS)}<div style="height:10px"></div><div class="row"><span class="muted" style="width:56px">Energy</span>${pick(`days.${d}.energy`, [1,2,3,4,5].map(n=>[n,n]), 'pick small')}</div><div style="height:6px"></div>${line(`days.${d}.moodNote`,'What’s behind it? (optional)')}`)
+      + card('', `<div class="cal">${cells}</div>`);
+  }
+  if (s === 'sleep') {
+    const rows = monthDays(mk).filter(x => x <= TODAY() || x.slice(0,7) !== monthKey(TODAY())).reverse();
+    body = head('Sleep', `${monthName(mk)} log`, monthNav())
+      + kpis([['Avg sleep', calc('sleepAvg',{mk})], ['Nights logged', monthDays(mk).filter(x => num(getP(`days.${x}.sleepHrs`)) > 0).length]])
+      + card('', `<div class="tbl-wrap"><table class="fin"><tr><th>Night of</th><th>Hours</th><th>Quality</th><th>Bedtime</th><th>Notes</th></tr>
+        ${rows.map(x => `<tr><td style="padding:0 6px;white-space:nowrap;font-size:.82rem">${fmt(x,{weekday:'short', month:'short', day:'numeric'})}</td>
+          <td style="width:80px">${field(`days.${x}.sleepHrs`,{t:'num', ph:'7.5'})}</td>
+          <td style="width:110px">${field(`days.${x}.sleepQ`,{t:'select', opts:['Poor','Fair','Okay','Good','Great']})}</td>
+          <td style="width:100px">${field(`days.${x}.bedtime`,{ph:'10:30p'})}</td>
+          <td>${field(`days.${x}.sleepNote`,{})}</td></tr>`).join('')}</table></div>`);
+  }
+  if (s === 'journal') {
+    const prompt = JOURNAL_PROMPTS[parse(TODAY()).getDate() % JOURNAL_PROMPTS.length];
+    body = head('Journal', 'write it down, then let it go')
+      + card("Today's prompt", `<div class="focusline">${esc(prompt)}</div>`)
+      + cardList('wellness.journal', [
+          {k:'title', title:true, ph:'Title'}, {k:'date', t:'date', h:'Date'},
+          {k:'mood', t:'select', h:'Mood', opts:MOODS.map(m=>`${m[1]} ${m[2]}`)},
+          {k:'body', t:'area', block:true, rows:8, ph:'Write freely…'}
+        ], { add:'Journal entry', init:{date:TODAY()} });
+  }
+  if (s === 'routine') {
+    const routine = items('wellness.routine').filter(([,x]) => x.item);
+    body = head('Routine', 'build the rails your days run on', dayNav())
+      + `<div class="grid2 even"><div>${card('My routine', tableList('wellness.routine', [
+          {k:'when', t:'select', h:'When', opts:['Morning','Evening'], w:'120px'}, {k:'item', h:'Step', ph:'e.g. Pray 10 minutes'}
+        ], { add:'Step', init:{when:'Morning'} }))}</div>
+        <div>${card(`Checked off · ${fmt(d,{weekday:'short', month:'short', day:'numeric'})}`, routine.length ? routine.map(([id,x]) => `<div class="row donable ${getP(`days.${d}.routine.${id}`,false)?'done':''}" style="padding:6px 0">${chk(`days.${d}.routine.${id}`, true)}<span class="line" style="border:0">${esc(x.when ? x.when + ' · ' : '')}${esc(x.item)}</span></div>`).join('') + `<p class="muted" style="margin:8px 0 0">${calc('ticks',{base:`days.${d}.routine`, of:routine.length})} done</p>` : '<p class="muted empty">Add steps on the left. They also appear on the Today page.</p>')}</div></div>`;
+  }
+  if (s === 'meds') {
+    const meds = items('wellness.meds').filter(([,m]) => m.name);
+    body = head('Medications', 'what you take, and whether you took it', dayNav())
+      + `<div class="grid2 even"><div>${card('My medications & supplements', tableList('wellness.meds', [
+          {k:'name', h:'Name', ph:'Vitamin D'}, {k:'dose', h:'Dose', ph:'2000 IU'}, {k:'time', h:'When', ph:'AM'}
+        ], { add:'Medication' }))}</div>
+        <div>${card(`Taken · ${fmt(d,{weekday:'short', month:'short', day:'numeric'})}`, meds.length ? meds.map(([id,m]) => `<div class="row" style="padding:6px 0">${chk(`days.${d}.meds.${id}`)}<span>${esc(m.name)} <span class="muted">${esc(m.dose||'')} ${esc(m.time||'')}</span></span></div>`).join('') : '<p class="muted empty">Add medications on the left. They also appear on the Today page.</p>')}</div></div>`;
+  }
+  if (s === 'metrics') {
+    body = head('Body metrics', 'measure what you want to change')
+      + card('', tableList('wellness.metrics', [
+          {k:'date', t:'date', h:'Date', w:'140px'}, {k:'weight', t:'num', h:'Weight', ph:'lbs'}, {k:'waist', t:'num', h:'Waist', ph:'in'},
+          {k:'chest', t:'num', h:'Chest'}, {k:'hips', t:'num', h:'Hips'}, {k:'arms', t:'num', h:'Arms'}, {k:'bf', t:'num', h:'Body fat %'}, {k:'notes', h:'Notes'}
+        ], { newest:true, add:'Measurement', init:{date:TODAY()} }));
+  }
+  if (s === 'symptoms') {
+    body = head('Anxiety & pain', 'track it to find the pattern')
+      + card('', tableList('wellness.symptoms', [
+          {k:'date', t:'date', h:'Date', w:'140px'}, {k:'type', t:'select', h:'Type', opts:['Anxiety','Migraine','Headache','Pain','Other']},
+          {k:'level', t:'select', h:'Level', opts:['1','2','3','4','5','6','7','8','9','10']}, {k:'trigger', h:'Trigger'}, {k:'relief', h:'What helped'}
+        ], { newest:true, add:'Entry', init:{date:TODAY(), type:'Anxiety'} }));
+  }
+  if (s === 'coping') {
+    const C = `days.${d}.coping`;
+    body = head('Coping skills', 'tap what you used — it gets logged to this day', dayNav())
+      + Object.entries(COPING).map(([cat, list], ci) => card(cat, `<div class="chips">${list.map((sk, si) => `<button class="chip ${getP(`${C}.${ci}_${si}`,false)?'on':''}" data-act="toggle" data-p="${C}.${ci}_${si}">${esc(sk)}</button>`).join('')}</div>`)).join('')
+      + `<p class="muted center">Used today: <b>${calc('ticks',{base:C})}</b></p>`;
+  }
+  if (s === 'books') {
+    body = head('Reading list', 'what you’re reading and what’s next')
+      + card('', tableList('wellness.books', [
+          {k:'title', h:'Title'}, {k:'author', h:'Author'}, {k:'status', t:'select', h:'Status', opts:['Reading','Finished','Want to read'], w:'140px'}, {k:'takeaway', h:'Takeaway'}
+        ], { add:'Book', init:{status:'Reading'} }));
+  }
+  return nav + body;
 }
+
+/* ═══════════════════ FINANCE ═══════════════════ */
 function viewFinance(){
-  const mk = monthKey(cursor), t = finTotals(mk);
-  return `
-  <div class="head">
-    <div><h1>${monthName(mk)} money</h1><div class="sub">Track it. Own it. Multiply it.</div></div>
-    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
-  </div>
-  <div class="summary" style="margin-bottom:14px">
-    <div><small>INCOME</small><strong data-sum="inc">${money(t.inc)}</strong></div>
-    <div><small>OUT</small><strong data-sum="out">${money(t.out)}</strong></div>
-    <div><small>NET</small><strong data-sum="net" class="${t.net<0?'neg':''}">${money(t.net)}</strong></div>
-  </div>
-  <div class="card">${label('Income')}${finTable(mk,'income',[{k:'date',h:'Date',w:'90px',ph:'10/1'},{k:'src',h:'Source'},{k:'amt',h:'Amount',w:'110px',ph:'0.00'}])}</div>
-  <div class="card">${label('Fixed bills')}${finTable(mk,'bills',[{k:'name',h:'Bill'},{k:'due',h:'Due',w:'70px',ph:'15th'},{k:'amt',h:'Amount',w:'110px',ph:'0.00'},{k:'paid',h:'Paid',w:'44px'}])}</div>
-  <div class="card">${label('Variable expenses')}${finTable(mk,'exp',[{k:'date',h:'Date',w:'80px',ph:'10/1'},{k:'cat',h:'Category',w:'120px',ph:'Groceries'},{k:'desc',h:'Description'},{k:'amt',h:'Amount',w:'110px',ph:'0.00'}])}</div>`;
+  const [s, nav] = subnav('finance', [['log','Monthly Log'],['savings','Savings'],['debt','Debt'],['giving','Giving'],['nospend','No-Spend']]);
+  const mk = monthKey(cursor), F = `months.${mk}.fin`;
+  const sumFoot = (base, k='amt', lbl='TOTAL') => `<span class="total"><span>${lbl}</span>${calc('sum',{base,k})}</span>`;
+  let body = '';
+  if (s === 'log') {
+    body = head(`${monthName(mk)} money`, 'Track it. Own it. Multiply it.', monthNav())
+      + `<div class="summary" style="margin-bottom:14px">${[['INCOME','inc'],['OUT','out'],['NET','net']].map(([l,w])=>`<div><small>${l}</small><strong>${calc('fin',{mk,w})}</strong></div>`).join('')}</div>`
+      + card('Income', tableList(`${F}.income`, [{k:'date',h:'Date',ph:'10/1',w:'90px'},{k:'src',h:'Source'},{k:'amt',t:'num',h:'Amount',ph:'0.00',w:'110px'}], { foot: sumFoot(`${F}.income`) }))
+      + card('Fixed bills', tableList(`${F}.bills`, [{k:'name',h:'Bill'},{k:'due',h:'Due',ph:'15th',w:'70px'},{k:'amt',t:'num',h:'Amount',ph:'0.00',w:'110px'},{k:'paid',t:'check',h:'Paid',done:true}], { foot: sumFoot(`${F}.bills`) }))
+      + card('Variable expenses', tableList(`${F}.exp`, [{k:'date',h:'Date',ph:'10/1',w:'80px'},{k:'cat',t:'select',h:'Category',opts:['Groceries','Gas','Dining','Household','Personal','Kids','Pets','Health','Entertainment','Other'],w:'120px'},{k:'desc',h:'Description'},{k:'amt',t:'num',h:'Amount',ph:'0.00',w:'110px'}], { foot: sumFoot(`${F}.exp`) }));
+  }
+  if (s === 'savings') {
+    const t = items('finance.savings').reduce((a,[,r]) => [a[0]+num(r.saved), a[1]+num(r.target)], [0,0]);
+    body = head('Savings goals', 'give every dollar a job')
+      + kpis([['Saved', money(t[0])], ['Goal total', money(t[1])], ['Overall', t[1] ? Math.round(t[0]/t[1]*100)+'%' : '—']])
+      + card('', tableList('finance.savings', [
+          {k:'name', h:'Goal', ph:'Emergency fund'}, {k:'target', t:'num', h:'Target', ph:'0.00'}, {k:'saved', t:'num', h:'Saved', ph:'0.00'},
+          {k:'pct', t:'calc', calc:'pct', h:'Progress', args:{a:'saved', b:'target'}}, {k:'left', t:'calc', calc:'left', h:'To go', args:{a:'saved', b:'target'}}, {k:'by', t:'date', h:'By'}
+        ], { add:'Savings goal', foot: `<span class="total"><span>SAVED</span>${calc('sum',{base:'finance.savings',k:'saved'})}</span>` }));
+  }
+  if (s === 'debt') {
+    body = head('Debt payoff', 'list it, attack it, kill it')
+      + card('', tableList('finance.debt', [
+          {k:'name', h:'Debt', ph:'Car loan'}, {k:'bal', t:'num', h:'Balance', ph:'0.00'}, {k:'rate', t:'num', h:'Rate %', ph:'0'},
+          {k:'min', t:'num', h:'Min payment', ph:'0.00'}, {k:'due', h:'Due', ph:'1st', w:'70px'}
+        ], { add:'Debt', sort:(a,b) => num(a[1].bal) - num(b[1].bal),
+             foot: `<span class="total"><span>BALANCE</span>${calc('sum',{base:'finance.debt',k:'bal'})}</span><span class="total"><span>MIN / MO</span>${calc('sum',{base:'finance.debt',k:'min'})}</span>` }))
+      + `<p class="muted">Sorted smallest balance first (snowball). Pay minimums on everything, throw extra at the top row.</p>`;
+  }
+  if (s === 'giving') {
+    const y = cursor.slice(0,4);
+    body = head('Giving', `${monthName(mk)} ${y}`, monthNav())
+      + kpis([[`${monthName(mk)}`, calc('sum',{base:'finance.giving',k:'amt',prefix:mk})], [`${y} total`, calc('sum',{base:'finance.giving',k:'amt',prefix:y})]])
+      + card('', tableList('finance.giving', [
+          {k:'date', t:'date', h:'Date', w:'140px'}, {k:'to', h:'To', ph:'Northwood Church'},
+          {k:'type', t:'select', h:'Type', opts:['Tithe','Offering','Missions','Building fund','Charity','Person in need','Other']}, {k:'amt', t:'num', h:'Amount', ph:'0.00', w:'110px'}
+        ], { newest:true, add:'Gift', init:{date:TODAY(), type:'Tithe'} }));
+  }
+  if (s === 'nospend') {
+    const NS = `months.${mk}.nospend`;
+    const first = parse(mk+'-01').getDay();
+    body = head('No-spend days', `${monthName(mk)} · tap a day you spent nothing extra`, monthNav())
+      + kpis([['No-spend days', calc('ticks',{base:NS})]])
+      + card('', `<div class="daygrid">${DOW.map(x=>`<div class="muted center" style="font-size:.65rem;font-weight:700">${x}</div>`).join('')}${'<div></div>'.repeat(first)}${monthDays(mk).map(x => `<button class="hcell big ${getP(`${NS}.${parse(x).getDate()}`,false)?'on':''} ${x===TODAY()?'today':''}" data-act="toggle" data-p="${NS}.${parse(x).getDate()}">${parse(x).getDate()}</button>`).join('')}</div>`)
+      + card('Rules for this challenge', area(`${NS}_rules`, 'e.g. Bills and groceries OK. No eating out, no Amazon.', 3));
+  }
+  return nav + body;
 }
 
-function scorecard(path){
-  return AREAS.map(([a,d])=>`<div class="scoreline"><b>${a}<small>${d}</small></b>${rate(`${path}.${a}`)}</div>`).join('');
+/* ═══════════════════ LISTS ═══════════════════ */
+let T = { mode:'work', total:1500, left:1500, run:false, end:0, iv:null };
+let actx;
+function viewLists(){
+  const [s, nav] = subnav('lists', [['todo','To-Do'],['shop','Shopping'],['check','Checklists'],['brain','Brain Dump'],['clean','Cleaning'],['focus','Focus Timer']]);
+  let body = '';
+  if (s === 'todo') {
+    const pri = {High:0, Medium:1, Low:2};
+    body = head('To-do', 'anything with a due date also shows on that day')
+      + card('', tableList('lists.todo', [
+          {k:'done', t:'check', h:'✓', done:true}, {k:'task', h:'Task', ph:'What needs doing?'},
+          {k:'due', t:'date', h:'Due', w:'140px'}, {k:'pri', t:'select', h:'Priority', opts:['High','Medium','Low'], w:'100px'}
+        ], { add:'Task', init:{pri:'Medium'},
+             sort:(a,b) => (!!a[1].done - !!b[1].done) || ((a[1].due||'9999') < (b[1].due||'9999') ? -1 : (a[1].due||'9999') > (b[1].due||'9999') ? 1 : 0) || ((pri[a[1].pri]??3) - (pri[b[1].pri]??3)),
+             foot: `<button class="add" data-act="clearchecked" data-p="lists.todo" data-k="done">Clear completed</button>` }));
+  }
+  if (s === 'shop') {
+    body = head('Shopping list', 'tap a staple to add it')
+      + card('Quick add', `<div class="chips">${SHOP_QUICK.map(x => `<button class="chip add" data-act="addrow" data-nofocus="1" data-p="lists.shop" data-init="${esc(JSON.stringify({item:x}))}">+ ${esc(x)}</button>`).join('')}</div>`)
+      + card('', tableList('lists.shop', [
+          {k:'got', t:'check', h:'✓', done:true}, {k:'item', h:'Item', ph:'Item'}, {k:'qty', h:'Qty', ph:'1', w:'70px'},
+          {k:'aisle', t:'select', h:'Section', opts:['Produce','Meat','Dairy','Bakery','Pantry','Frozen','Household','Personal','Pets','Other'], w:'120px'}
+        ], { add:'Item', sort: (a,b) => (!!a[1].got - !!b[1].got) || String(a[1].aisle||'~').localeCompare(String(b[1].aisle||'~')),
+             foot: `<span class="muted">${calc('rowsDone',{base:'lists.shop',k:'got'})} in cart</span><button class="add" data-act="clearchecked" data-p="lists.shop" data-k="got">Clear checked</button>` }));
+  }
+  if (s === 'check') {
+    const lists = items('lists.cl').sort((a,b)=>a[0].localeCompare(b[0]));
+    body = head('Checklists', 'packing, prep, launch lists — anything you repeat')
+      + `<div class="fin-foot" style="margin:0 0 12px">${addBtn('lists.cl', 'New checklist', {title:''}, 'btn')}</div>`
+      + (lists.length ? `<div class="grid2 even">${lists.map(([id]) => {
+          const B = `lists.cl.${id}`, its = items(`${B}.items`).sort((a,b)=>a[0].localeCompare(b[0]));
+          return `<div class="card item"><div class="item-head"><input class="title-in" data-p="${B}.title" value="${esc(getP(`${B}.title`))}" placeholder="Checklist name"><button class="del" data-act="delrow" data-confirm="1" data-p="${B}" aria-label="Delete checklist">×</button></div>
+            <div style="margin-top:6px">${its.map(([iid,it]) => `<div class="row donable ${it.done?'done':''}" style="border-bottom:1px solid var(--line)">${chk(`${B}.items.${iid}.done`, true)}<input class="line" style="border:0" data-p="${B}.items.${iid}.t" value="${esc(it.t)}"><span class="x"><button data-act="delrow" data-p="${B}.items.${iid}" aria-label="Delete item">×</button></span></div>`).join('')}</div>
+            <div class="fin-foot">${addBtn(`${B}.items`, 'Item')}<span class="muted">${calc('rowsDone',{base:`${B}.items`,k:'done'})}</span>
+            <button class="add" data-act="uncheckall" data-p="${B}.items">Reset</button></div></div>`;
+        }).join('')}</div>` : '<p class="muted empty">No checklists yet.</p>');
+  }
+  if (s === 'brain') {
+    body = head('Brain dump', 'get it out of your head — sort it later')
+      + card('', area('lists.brain', 'Everything on your mind…', 18));
+  }
+  if (s === 'clean') {
+    const [p, pnav] = subnav('cleanp', [['daily','Daily'],['weekly','Weekly'],['monthly','Monthly'],['quarterly','Quarterly'],['yearly','Yearly']]);
+    const dt = parse(cursor);
+    const key = { daily: cursor, weekly: weekStart(cursor), monthly: monthKey(cursor), quarterly: `${dt.getFullYear()}-Q${Math.floor(dt.getMonth()/3)+1}`, yearly: String(dt.getFullYear()) }[p];
+    const lbl = { daily: fmt(cursor,{weekday:'long', month:'short', day:'numeric'}), weekly: 'Week of ' + fmt(weekStart(cursor),{month:'short', day:'numeric'}), monthly: monthName(monthKey(cursor)) + ' ' + dt.getFullYear(), quarterly: key.replace('-',' '), yearly: key }[p];
+    const B = `clean.${p}.${key}`;
+    body = head('Cleaning', lbl, dayNav()) + pnav
+      + card(`${p} tasks`, CLEAN[p].map((t,i) => `<div class="row donable ${getP(`${B}.${i}`,false)?'done':''}" style="padding:7px 0;border-bottom:1px solid var(--line)">${chk(`${B}.${i}`, true)}<span class="line" style="border:0">${esc(t)}</span></div>`).join(''), calc('ticks',{base:B, of:CLEAN[p].length}));
+  }
+  if (s === 'focus') {
+    const sessions = Number(getP(`days.${TODAY()}.focus`,0));
+    body = head('Focus timer', 'work in sprints, rest on purpose')
+      + card('', `<div class="timer" id="tring"><div class="timer-in"><small id="tmode">FOCUS</small><b id="tval">25:00</b><span id="tsess">${sessions} sessions today</span></div></div>
+        <div class="center" style="display:flex;gap:10px;justify-content:center;margin-bottom:14px"><button class="btn" id="tbtn" data-act="tstart">Start</button><button class="btn ghost" data-act="treset">Reset</button></div>
+        <div class="chips" style="justify-content:center">${[['Pomodoro',25,'work'],['Short break',5,'break'],['Long break',15,'break'],['Deep work',50,'work'],['Quick',15,'work']].map(([l,m,mode]) => `<button class="chip" data-act="tpreset" data-m="${m}" data-mode="${mode}">${l} · ${m}m</button>`).join('')}</div>`)
+      + card('What I’m focusing on', line(`days.${TODAY()}.focusOn`, 'One thing, start to finish'));
+  }
+  return nav + body;
 }
-function viewSetup(){
-  const mk = monthKey(cursor), M = `months.${mk}`;
-  return `
-  <div class="head">
-    <div><h1>Setup</h1><div class="sub">${monthName(mk)} ${mk.slice(0,4)} · set the direction before the days fill up</div></div>
-    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
-  </div>
-  <div class="grid2 even">
-    <div>
-      <div class="card" style="border-color:var(--brass)">${label('Word of the month')}<input class="line" style="font-family:var(--serif);font-style:italic;font-size:1.6rem" data-p="${M}.word" value="${esc(getP(`${M}.word`))}"></div>
-      <div class="card">${label('Why this word')}${area(`${M}.why`)}</div>
-      <div class="card">${label('Five core values','the non-negotiables — these carry across months')}${[0,1,2,3,4].map(i=>line(`setup.values.${i}`,`${i+1}.`)).join('')}</div>
-    </div>
-    <div>
-      ${[0,1,2].map(i=>`<div class="card">${label(`Goal 0${i+1}`)}
-        ${line(`${M}.goals.${i}.goal`,'The goal')}${line(`${M}.goals.${i}.why`,'Why it matters')}${line(`${M}.goals.${i}.measure`,"How I'll measure it")}</div>`).join('')}
-    </div>
-  </div>
-  <div class="card">${label('Life scorecard — start of month','honest 1–10')}${scorecard(`${M}.scoreStart`)}</div>
-  <p class="quote">“Commit thy works unto the Lord, and thy thoughts shall be established.”</p>
-  <p class="muted" style="text-align:center;margin:0">Proverbs 16:3</p>`;
+function tdraw(){
+  const v = document.getElementById('tval'); if (!v) return;
+  const m = Math.floor(T.left/60), s = T.left % 60;
+  v.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('tmode').textContent = T.mode === 'work' ? 'FOCUS' : 'BREAK';
+  document.getElementById('tsess').textContent = `${Number(getP(`days.${TODAY()}.focus`,0))} sessions today`;
+  document.getElementById('tbtn').textContent = T.run ? 'Pause' : (T.left < T.total ? 'Resume' : 'Start');
+  const pct = 100 - (T.left / T.total * 100);
+  document.getElementById('tring').style.background = `conic-gradient(${T.mode==='work' ? 'var(--brass)' : 'var(--ok)'} ${pct}%, var(--line) 0)`;
+}
+function ttick(){
+  T.left = Math.max(0, Math.round((T.end - Date.now())/1000));
+  if (T.left === 0) {
+    clearInterval(T.iv); T.run = false; beep();
+    if (T.mode === 'work') { setP(`days.${TODAY()}.focus`, Number(getP(`days.${TODAY()}.focus`,0)) + 1); T.mode = 'break'; T.total = T.left = 300 }
+    else { T.mode = 'work'; T.total = T.left = 1500 }
+  }
+  tdraw();
+}
+function beep(){
+  try { const o = actx.createOscillator(), g = actx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(actx.destination);
+    g.gain.setValueAtTime(.25, actx.currentTime); g.gain.exponentialRampToValueAtTime(.001, actx.currentTime + 1.4); o.start(); o.stop(actx.currentTime + 1.4) } catch(e){}
 }
 
-function viewReview(){
+/* ═══════════════════ LIFE ═══════════════════ */
+function viewLife(){
+  const [s, nav] = subnav('life', [['birthdays','Birthdays'],['trips','Trips'],['recipes','Recipes'],['gifts','Gifts'],['workouts','Workouts']]);
+  let body = '';
+  if (s === 'birthdays') {
+    body = head('Birthdays & dates', 'anything within 7 days shows on Today')
+      + card('', tableList('life.birthdays', [
+          {k:'name', h:'Name', ph:'Name'}, {k:'date', t:'date', h:'Date', w:'150px'}, {k:'kind', t:'select', h:'Type', opts:['Birthday','Anniversary','Other'], w:'130px'},
+          {k:'until', t:'calc', calc:'until', h:'In'}, {k:'notes', h:'Gift ideas / notes'}
+        ], { add:'Date', init:{kind:'Birthday'}, sort:(a,b) => daysUntil(a[1].date) - daysUntil(b[1].date) }));
+  }
+  if (s === 'trips') {
+    body = head('Trips', 'plan it before you pack it')
+      + cardList('life.trips', [
+          {k:'dest', title:true, ph:'Destination'}, {k:'start', t:'date', h:'Leave'}, {k:'end', t:'date', h:'Return'}, {k:'budget', t:'num', h:'Budget', ph:'0'},
+          {k:'stay', t:'area', block:true, h:'Lodging & travel', rows:2}, {k:'pack', t:'area', block:true, h:'Packing list', rows:5}, {k:'notes', t:'area', block:true, h:'Itinerary & notes', rows:4}
+        ], { add:'Trip' });
+  }
+  if (s === 'recipes') {
+    body = head('Recipes', 'the meals worth making again')
+      + `<input class="search" data-search="1" placeholder="Search recipes…">`
+      + cardList('life.recipes', [
+          {k:'name', title:true, ph:'Recipe name'}, {k:'cat', t:'select', h:'Type', opts:['Breakfast','Lunch','Dinner','Snack','Dessert','Meal prep','Drink']},
+          {k:'serves', h:'Serves', ph:'4'}, {k:'time', h:'Time', ph:'30 min'},
+          {k:'ing', t:'area', block:true, h:'Ingredients', rows:6}, {k:'steps', t:'area', block:true, h:'Steps', rows:6}
+        ], { add:'Recipe' });
+  }
+  if (s === 'gifts') {
+    body = head('Gift ideas', 'write it down when you hear it')
+      + card('', tableList('life.gifts', [
+          {k:'bought', t:'check', h:'✓', done:true}, {k:'person', h:'For', ph:'Name'}, {k:'occasion', h:'Occasion', ph:'Christmas'},
+          {k:'idea', h:'Idea'}, {k:'budget', t:'num', h:'Budget', ph:'0.00', w:'100px'}
+        ], { add:'Gift idea', sort: doneLast('bought'), foot: `<span class="total"><span>BUDGET</span>${calc('sum',{base:'life.gifts',k:'budget'})}</span>` }));
+  }
+  if (s === 'workouts') {
+    const mk = monthKey(TODAY());
+    body = head('Workouts', 'log the work')
+      + kpis([['This month', items('life.workouts').filter(([,r]) => String(r.date||'').startsWith(mk)).length + ' sessions']])
+      + card('', tableList('life.workouts', [
+          {k:'date', t:'date', h:'Date', w:'140px'}, {k:'type', t:'select', h:'Type', opts:['Strength','Hypertrophy','Calisthenics','Mobility','Cardio','Conditioning','Sport','Walk','Other']},
+          {k:'mins', t:'num', h:'Min', ph:'45', w:'70px'}, {k:'rpe', t:'select', h:'RPE', opts:['5','6','7','8','9','10'], w:'70px'}, {k:'notes', h:'Workout / notes'}
+        ], { newest:true, add:'Workout', init:{date:TODAY()} }));
+  }
+  return nav + body;
+}
+
+/* ═══════════════════ NOTES ═══════════════════ */
+function viewNotes(){
+  return head('Notes', 'pinned notes stay on top')
+    + `<input class="search" data-search="1" placeholder="Search notes…">`
+    + cardList('notes', [
+        {k:'title', title:true, ph:'Title'}, {k:'cat', t:'select', h:'Tag', opts:['Personal','Work','Faith','Business','Ideas','Health','Family']},
+        {k:'pin', t:'check', h:'📌 Pin'}, {k:'body', t:'area', block:true, rows:6, ph:'Write…'}
+      ], { add:'Note', sort:(a,b) => (!!b[1].pin - !!a[1].pin) });
+}
+
+/* ═══════════════════ SETUP & REVIEW ═══════════════════ */
+const scorecard = (path) => AREAS.map(([a,d])=>`<div class="scoreline"><b>${a}<small>${d}</small></b>${rate(`${path}.${a}`)}</div>`).join('');
+function viewReflect(){
+  const [s, nav] = subnav('reflect', [['setup','Month Setup'],['review','Month Review']]);
   const mk = monthKey(cursor), M = `months.${mk}`;
+  if (s === 'setup') return nav
+    + head('Setup', `${monthName(mk)} ${mk.slice(0,4)} · set the direction before the days fill up`, monthNav())
+    + `<div class="grid2 even"><div>
+        ${card('Word of the month', `<input class="line" style="font-family:var(--serif);font-style:italic;font-size:1.6rem" data-p="${M}.word" value="${esc(getP(`${M}.word`))}">`, '', 'style="border-color:var(--brass)"')}
+        ${card('Why this word', area(`${M}.why`))}
+        ${card('Five core values', [0,1,2,3,4].map(i=>line(`setup.values.${i}`,`${i+1}.`)).join(''), 'these carry across months')}
+      </div><div>
+        ${[0,1,2].map(i=>card(`Goal 0${i+1}`, line(`${M}.goals.${i}.goal`,'The goal') + line(`${M}.goals.${i}.why`,'Why it matters') + line(`${M}.goals.${i}.measure`,"How I'll measure it"))).join('')}
+      </div></div>`
+    + card('Life scorecard — start of month', scorecard(`${M}.scoreStart`), 'honest 1–10')
+    + `<p class="quote">“Commit thy works unto the Lord, and thy thoughts shall be established.”</p><p class="muted center" style="margin:0">Proverbs 16:3</p>`;
+
   const deltas = AREAS.map(([a])=>{
-    const s = Number(getP(`${M}.scoreStart.${a}`,0)), e = Number(getP(`${M}.scoreEnd.${a}`,0));
-    return (s && e) ? `<span style="margin-right:14px"><b>${a}</b> ${s} → ${e} <span style="color:${e>=s?'var(--ok)':'var(--danger)'}">${e-s>=0?'+':''}${e-s}</span></span>` : '';
+    const st = Number(getP(`${M}.scoreStart.${a}`,0)), en = Number(getP(`${M}.scoreEnd.${a}`,0));
+    return (st && en) ? `<span style="margin-right:14px"><b>${a}</b> ${st} → ${en} <span style="color:${en>=st?'var(--ok)':'var(--danger)'}">${en-st>=0?'+':''}${en-st}</span></span>` : '';
   }).join('');
-  return `
-  <div class="head">
-    <div><h1>Looking back</h1><div class="sub">${monthName(mk)} ${mk.slice(0,4)} · monthly review</div></div>
-    <div class="nav"><button data-act="month" data-n="-1">‹</button><button data-act="goto" data-d="${TODAY()}">This month</button><button data-act="month" data-n="1">›</button></div>
-  </div>
-  <div class="grid2 even">
-    <div>
-      <div class="card">${label('What went well')}${area(`${M}.rv.well`,'',4)}</div>
-      <div class="card">${label("What didn't work")}${area(`${M}.rv.didnt`)}</div>
-      <div class="card">${label('God showed up here')}${area(`${M}.rv.god`)}</div>
-    </div>
-    <div>
-      <div class="card">${label('Lessons learned')}${area(`${M}.rv.lessons`)}</div>
-      <div class="card">${label('Next month — shift')}${area(`${M}.rv.shift`,'',2)}</div>
-      <div class="card">${label('How was the month overall?')}${rate(`${M}.rv.rating`)}</div>
-    </div>
-  </div>
-  <div class="card">${label('Life scorecard — end of month','compare to the start')}${scorecard(`${M}.scoreEnd`)}
-    ${deltas ? `<div style="margin-top:12px;font-size:.85rem;line-height:1.9">${deltas}</div>` : ''}</div>`;
+  return nav
+    + head('Looking back', `${monthName(mk)} ${mk.slice(0,4)} · monthly review`, monthNav())
+    + `<div class="grid2 even"><div>
+        ${card('What went well', area(`${M}.rv.well`,'',4))}${card("What didn't work", area(`${M}.rv.didnt`))}${card('God showed up here', area(`${M}.rv.god`))}
+      </div><div>
+        ${card('Lessons learned', area(`${M}.rv.lessons`))}${card('Next month — shift', area(`${M}.rv.shift`,'',2))}${card('How was the month overall?', rate(`${M}.rv.rating`))}
+      </div></div>`
+    + card('Life scorecard — end of month', scorecard(`${M}.scoreEnd`) + (deltas ? `<div style="margin-top:12px;font-size:.85rem;line-height:1.9">${deltas}</div>` : ''), 'compare to the start');
 }
 
+/* ═══════════════════ BACKUP ═══════════════════ */
 function viewBackup(){
-  const bytes = new Blob([JSON.stringify(S)]).size;
-  const last = S.meta?.lastBackup;
-  return `
-  <div class="head"><div><h1>Backup</h1><div class="sub">Your planner lives only on this iPad. Keep a copy somewhere safe.</div></div></div>
-  <div class="card">
-    ${label('Save a backup')}
-    <p class="muted">Saves a <b>.json</b> file. On iPad, choose <b>Save to Files → iCloud Drive</b>. Do this weekly.</p>
-    <button class="btn" data-act="export">Back up now</button>
-    <p class="muted" style="margin-bottom:0">Last backup: <b>${last ? new Date(last).toLocaleString() : 'never'}</b> · ${Object.keys(S.days).length} days logged · ${(bytes/1024).toFixed(1)} KB</p>
-  </div>
-  <div class="card">
-    ${label('Restore from a backup')}
-    <p class="muted">Replaces everything on this iPad with the backup file you pick.</p>
-    <label class="btn ghost" style="display:inline-block">Choose backup file<input type="file" accept="application/json,.json" id="importFile" hidden></label>
-  </div>
-  <div class="card">
-    ${label('Start over')}
-    <p class="muted">Erases every entry on this iPad. Back up first.</p>
-    <button class="btn danger" data-act="wipe">Erase all entries</button>
-  </div>
-  <div class="card">
-    ${label('Keeping your data safe')}
-    <p class="muted" style="margin:0">• Open the planner from the Home Screen icon, not a Safari tab.<br>
-    • Don't use Private Browsing.<br>
-    • Clearing Safari's history or website data will erase it.<br>
-    • The Home Screen app and Safari keep separate copies. Pick one and stick with it.</p>
-  </div>`;
+  const bytes = new Blob([JSON.stringify(S)]).size, last = S.meta?.lastBackup;
+  return head('Backup', 'Your planner lives only on this iPad. Keep a copy somewhere safe.')
+    + card('Save a backup', `<p class="muted">Saves a <b>.json</b> file. On iPad, choose <b>Save to Files → iCloud Drive</b>. Do this weekly.</p>
+        <button class="btn" data-act="export">Back up now</button>
+        <p class="muted" style="margin-bottom:0">Last backup: <b>${last ? new Date(last).toLocaleString() : 'never'}</b> · ${Object.keys(S.days||{}).length} days logged · ${(bytes/1024).toFixed(1)} KB</p>`)
+    + card('Restore from a backup', `<p class="muted">Replaces everything on this iPad with the backup file you pick.</p>
+        <label class="btn ghost" style="display:inline-block">Choose backup file<input type="file" accept="application/json,.json" id="importFile" hidden></label>`)
+    + card('Start over', `<p class="muted">Erases every entry on this iPad. Back up first.</p><button class="btn danger" data-act="wipe">Erase all entries</button>`)
+    + card('Keeping your data safe', `<p class="muted" style="margin:0">• Open the planner from the Home Screen icon, not a Safari tab.<br>
+        • Don't use Private Browsing.<br>• Clearing Safari's history or website data will erase it.<br>
+        • The Home Screen app and Safari keep separate copies. Pick one and stick with it.</p>`);
 }
 
-const VIEWS = { today:viewToday, week:viewWeek, month:viewMonth, habits:viewHabits, finance:viewFinance, setup:viewSetup, review:viewReview, backup:viewBackup };
+const VIEWS = { today:viewToday, week:viewWeek, month:viewMonth, habits:viewHabits, faith:viewFaith, wellness:viewWellness,
+  finance:viewFinance, lists:viewLists, life:viewLife, notes:viewNotes, reflect:viewReflect, backup:viewBackup };
+if (!VIEWS[tab]) tab = (tab === 'setup' || tab === 'review') ? 'reflect' : 'today';
 
 // ── Render ─────────────────────────────────────────────────────
 function render(keepScroll=false){
   const y = window.scrollY;
   document.getElementById('tabs').innerHTML = TABS.map(([k,l])=>`<button class="tab ${tab===k?'on':''}" data-tab="${k}">${l}</button>`).join('');
   document.getElementById('app').innerHTML = banners() + VIEWS[tab]();
-  sessionSet('tab', tab); sessionSet('cursor', cursor);
-  if (keepScroll) window.scrollTo(0, y); else window.scrollTo(0, 0);
-}
-function refreshFinance(){
-  const t = finTotals(monthKey(cursor));
-  for (const k of ['income','bills','exp']) { const el = document.querySelector(`[data-total="${k}"]`); if (el) el.textContent = money(t[k]) }
-  for (const k of ['inc','out','net']) { const el = document.querySelector(`[data-sum="${k}"]`); if (el) { el.textContent = money(t[k]); if (k==='net') el.classList.toggle('neg', t.net<0) } }
+  sessionSet('tab', tab); sessionSet('cursor', cursor); sessionSet('subs', JSON.stringify(subs));
+  refreshCalcs(); tdraw();
+  window.scrollTo(0, keepScroll ? y : 0);
+  if (pendingFocus) {
+    const el = document.querySelector(`[data-p^="${pendingFocus}."]:not([type=checkbox]):not(select)`);
+    pendingFocus = null; if (el) el.focus();
+  }
 }
 
 // ── Events ─────────────────────────────────────────────────────
 document.addEventListener('input', (e) => {
-  const p = e.target.dataset?.p; if (!p) return;
-  if (e.target.type === 'checkbox') return;
-  setP(p, e.target.value);
-  if (p.includes('.fin.')) refreshFinance();
+  const t = e.target;
+  if (t.dataset?.search) {
+    const q = t.value.trim().toLowerCase();
+    document.querySelectorAll('[data-sitem]').forEach(c => {
+      const text = [...c.querySelectorAll('input,textarea,select')].map(x => x.value).join(' ').toLowerCase();
+      c.style.display = !q || text.includes(q) ? '' : 'none';
+    });
+    return;
+  }
+  const p = t.dataset?.p; if (!p || t.type === 'checkbox') return;
+  setP(p, t.value); refreshCalcs();
 });
 document.addEventListener('change', (e) => {
   const t = e.target;
   if (t.id === 'importFile') return doImport(t.files[0]);
   if (t.type === 'checkbox' && t.dataset.p) {
     setP(t.dataset.p, t.checked);
-    t.closest('.row')?.classList.toggle('done', t.checked && /done/.test(t.dataset.p));
+    if (t.dataset.done) t.closest('.donable')?.classList.toggle('done', t.checked);
+    refreshCalcs();
   }
 });
 document.addEventListener('click', (e) => {
   const tb = e.target.closest('[data-tab]');
   if (tb) { tab = tb.dataset.tab; return render() }
+  const sb = e.target.closest('[data-sub]');
+  if (sb) { const [g,k] = sb.dataset.sub.split(':'); subs[g] = k; return render() }
 
   const rb = e.target.closest('[data-rate] button');
   if (rb) {
     const wrap = rb.parentElement, p = wrap.dataset.rate, n = Number(rb.dataset.n);
-    const cur = Number(getP(p,0)); setP(p, cur === n ? 0 : n);
+    setP(p, Number(getP(p,0)) === n ? 0 : n);
     wrap.querySelectorAll('button').forEach(b => b.classList.toggle('on', Number(b.dataset.n) === Number(getP(p,0))));
-    if (tab === 'review') render(true);
+    if (tab === 'reflect' || tab === 'wellness') render(true);
     return;
   }
 
   const a = e.target.closest('[data-act]'); if (!a) return;
   const act = a.dataset.act;
-  if (act === 'day')   { e.preventDefault(); cursor = addDays(cursor, Number(a.dataset.n)); render() }
-  if (act === 'goto')  { e.preventDefault(); cursor = a.dataset.d; if (a.dataset.open) tab = 'today'; render() }
-  if (act === 'month') { const d = parse(cursor); d.setDate(1); d.setMonth(d.getMonth() + Number(a.dataset.n)); cursor = iso(d); render() }
-  if (act === 'water') { const p = `days.${cursor}.water`, n = Number(a.dataset.n); setP(p, Number(getP(p,0)) === n ? n-1 : n); render(true) }
-  if (act === 'habit') { const p = `days.${a.dataset.d}.habits.${a.dataset.h}`; const v = !getP(p,false); setP(p, v); a.classList.toggle('on', v) }
-  if (act === 'addrow'){ setP(`${a.dataset.p}.${Date.now().toString(36)}`, {}); render(true) }
-  if (act === 'delrow'){ if (confirm('Delete this row?')) { delP(a.dataset.p); render(true) } }
+  if (act === 'day')    { e.preventDefault(); cursor = addDays(cursor, Number(a.dataset.n)); render() }
+  if (act === 'goto')   { e.preventDefault(); cursor = a.dataset.d; if (a.dataset.open) tab = 'today'; render(tab !== 'today') }
+  if (act === 'month')  { const d = parse(cursor); d.setDate(1); d.setMonth(d.getMonth() + Number(a.dataset.n)); cursor = iso(d); render() }
+  if (act === 'water')  { const p = `days.${cursor}.water`, n = Number(a.dataset.n); setP(p, Number(getP(p,0)) === n ? n-1 : n); render(true) }
+  if (act === 'toggle') { const v = !getP(a.dataset.p,false); setP(a.dataset.p, v); a.classList.toggle('on', v); refreshCalcs() }
+  if (act === 'addrow') {
+    const id = uid(), init = a.dataset.init ? JSON.parse(a.dataset.init) : {};
+    setP(`${a.dataset.p}.${id}`, init);
+    if (!a.dataset.nofocus) pendingFocus = `${a.dataset.p}.${id}`;
+    render(true);
+  }
+  if (act === 'delrow') { if (!a.dataset.confirm || confirm('Delete this? It can’t be undone.')) { delP(a.dataset.p); render(true) } }
+  if (act === 'clearchecked') {
+    const done = items(a.dataset.p).filter(([,r]) => r[a.dataset.k]);
+    if (done.length && confirm(`Remove ${done.length} checked item${done.length>1?'s':''}?`)) { done.forEach(([id]) => delP(`${a.dataset.p}.${id}`)); render(true) }
+  }
+  if (act === 'uncheckall') { items(a.dataset.p).forEach(([id]) => setP(`${a.dataset.p}.${id}.done`, false)); render(true) }
+  if (act === 'tstart') {
+    try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); actx.resume() } catch(err){}
+    if (T.run) { clearInterval(T.iv); T.run = false }
+    else { T.end = Date.now() + T.left*1000; T.run = true; T.iv = setInterval(ttick, 500) }
+    tdraw();
+  }
+  if (act === 'treset')  { clearInterval(T.iv); T.run = false; T.left = T.total; tdraw() }
+  if (act === 'tpreset') { clearInterval(T.iv); T.run = false; T.mode = a.dataset.mode; T.total = T.left = Number(a.dataset.m) * 60; tdraw() }
   if (act === 'export') doExport();
-  if (act === 'wipe')  { if (confirm('Erase every entry on this iPad? This cannot be undone.') && confirm('Are you sure? Did you back up first?')) { S = { v:1, days:{}, weeks:{}, months:{}, setup:{}, meta:{} }; save(); render() } }
+  if (act === 'wipe') { if (confirm('Erase every entry on this iPad? This cannot be undone.') && confirm('Are you sure? Did you back up first?')) { S = { v:1, days:{}, weeks:{}, months:{}, setup:{}, meta:{} }; save(); render() } }
 });
 
 // ── Backup ─────────────────────────────────────────────────────
